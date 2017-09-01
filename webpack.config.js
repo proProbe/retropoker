@@ -8,22 +8,19 @@ const WriteFilePlugin = require("write-file-webpack-plugin");
 // load the secrets
 const alias = {};
 
-const secretsPath = path.join(__dirname, ("secrets." + env.NODE_ENV + ".js"));
+const secretsPath = path.join(__dirname, `secrets.${env.NODE_ENV}.js`);
 
 if (fileSystem.existsSync(secretsPath)) {
-  alias["secrets"] = secretsPath;
+  alias.secrets = secretsPath;
 }
 
 const options = {
   entry: {
-    index: path.join(__dirname, "src", "index.js")
-    // popup: path.join(__dirname, "src", "js", "popup.js"),
-    // options: path.join(__dirname, "src", "js", "options.js"),
-    // background: path.join(__dirname, "src", "js", "background.js"),
+    index: path.join(__dirname, "src", "index.js"),
   },
   output: {
     path: path.join(__dirname, "build"),
-    filename: "[name].bundle.js"
+    filename: "[name].bundle.js",
   },
   module: {
     rules: [
@@ -33,12 +30,12 @@ const options = {
   },
   resolve: {
     alias: alias,
-    extensions: [".js", ".jsx", ".css"]
+    extensions: [".js", ".jsx", ".css"],
   },
   plugins: [
     // expose and write the allowed env vars on the compiled bundle
     new webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV)
+      "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "index.html"),
