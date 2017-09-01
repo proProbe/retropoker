@@ -1,18 +1,18 @@
 import React from "react";
 
 interface IProps {
-  compiler: string;
-  framework: string;
 }
 
-class Main extends React.Component<IProps, {}> {
+interface IState {
+}
 
-  constructor(props: any) {
+class Main extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = this.initState();
   }
 
-  private initState(): any {
+  private initState(): IState {
     return {};
   }
 
