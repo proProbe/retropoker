@@ -16,21 +16,22 @@ if (fileSystem.existsSync(secretsPath)) {
 
 const options = {
   entry: {
-    index: path.join(__dirname, "src", "index.js"),
+    index: path.join(__dirname, "src", "index.tsx"),
   },
   output: {
-    path: path.join(__dirname, "build"),
+    path: path.join(__dirname, "dist"),
     filename: "[name].bundle.js",
   },
   module: {
     rules: [
-      { test: /\.(js|jsx)$/, loaders: ["babel-loader", "eslint-loader"], exclude: /node_modules/ },
       { test: /\.css$/, loader: "style-loader!css-loader", exclude: /node_modules/ },
+      { test: /\.tsx?$/, loaders: ["babel-loader", "awesome-typescript-loader"]},
+      { test: /\.js$/, loader: "source-map-loader", enforce: "pre"},
     ],
   },
   resolve: {
     alias: alias,
-    extensions: [".js", ".jsx", ".css"],
+    extensions: [".js", ".jsx", ".css", ".tsx", ".json"],
   },
   plugins: [
     // expose and write the allowed env vars on the compiled bundle
@@ -44,6 +45,11 @@ const options = {
     }),
     new WriteFilePlugin(),
   ],
+  // use externals if you include cdns and such in index.html
+  // externals: {
+  //   react: "React",
+  //   "react-dom": "ReactDOM",
+  // },
 };
 
 if (env.NODE_ENV === "development") {

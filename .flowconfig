@@ -1,7 +1,0 @@
-[ignore]
-[include]
-
-[libs]
-config/flow/ignored-variables.js
-
-[options]

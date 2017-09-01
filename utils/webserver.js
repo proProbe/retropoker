@@ -37,4 +37,10 @@ const server =
     },
   });
 
-server.listen(env.PORT);
+server.listen(env.PORT, "localhost", (err, res) => {
+  if(err) {
+    return console.log(err);
+  }
+
+  console.log(`Listening at http://localhost:${env.PORT}/`)
+});
