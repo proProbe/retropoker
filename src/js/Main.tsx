@@ -17,7 +17,7 @@ class Main extends React.Component<IProps, IState> {
   }
 
   public render(): JSX.Element {
-    return <div>Hello2</div>;
+    return <div>Hello</div>;
   }
 }
 

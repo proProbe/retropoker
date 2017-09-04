@@ -4,9 +4,9 @@
   "description": "Awesome app for doing retro",
   "main": "index.js",
   "scripts": {
-    "build": "node utils/build.js",
-    "start": "node utils/webserver.js",
-    "prod-build": "set NODE_ENV=production && npm run build"
+    "test": "",
+    "build": "rimraf dist && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "start": "rimraf dist && node server.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.24.1",
+    "cross-env": "^5.0.5",
     "css-loader": "^0.25.0",
     "diff": "^3.3.0",
     "fs-extra": "^0.30.0",
@@ -34,17 +35,24 @@
     "jquery": "^3.2.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "rimraf": "^2.6.1",
+    "stats-webpack-plugin": "^0.6.1",
     "style-loader": "^0.13.2",
     "webpack": "^2.7.0",
+    "webpack-dev-middleware": "^1.12.0",
     "webpack-dev-server": "^2.7.1",
+    "webpack-hot-middleware": "^2.18.2",
     "whatwg-fetch": "^2.0.3",
     "write-file-webpack-plugin": "^3.4.2"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^3.2.3",
+    "express": "^4.15.4",
+    "nodemon": "^1.11.0",
     "source-map-loader": "^0.2.1",
     "tslint": "^5.7.0",
     "tslint-react": "^3.2.0",
-    "typescript": "^2.5.2"
+    "typescript": "^2.5.2",
+    "webpack-node-externals": "^1.6.0"
   }
 }

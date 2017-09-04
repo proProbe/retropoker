@@ -4,9 +4,7 @@ const fileSystem = require("fs");
 const env = require("./utils/env");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WriteFilePlugin = require("write-file-webpack-plugin");
-const prepare = require("./utils/prepare");
-
-// prepare.clearDist();
+const StatsPlugin = require("stats-webpack-plugin");
 
 // load the secrets
 const alias = {};
@@ -17,16 +15,13 @@ if (fileSystem.existsSync(secretsPath)) {
 
 const options = {
   name: "Web",
-  devtool: "eval-source-map",
+  devtool: "source-map",
   entry: {
-    index: [
-      "webpack-hot-middleware/client?reload=true",
-      path.join(__dirname, "src", "index.tsx"),
-    ]
+    index: path.join(__dirname, "src", "index.tsx")
   },
   output: {
     path: path.join(__dirname, "dist"),
-    filename: "[name].bundle.js",
+    filename: "[name]-[hash].bundle.js",
     publicPath: "/"
   },
   resolve: {
@@ -38,9 +33,16 @@ const options = {
       template: path.join(__dirname, "src", "index.html"),
       filename: "index.html",
     }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false,
+        screw_ie8: true
+      }
+    }),
+    new StatsPlugin('webpack.stats.json', {
+      source: false,
+      modules: false
+    }),
     new webpack.DefinePlugin({
       "process.env": {
         "NODE_ENV": JSON.stringify(env.NODE_ENV)
@@ -52,7 +54,6 @@ const options = {
     rules: [
       { test: /\.css$/, loader: "style-loader!css-loader", exclude: /node_modules/ },
       { test: /\.tsx?$/, loaders: ["babel-loader", "awesome-typescript-loader"]},
-      { test: /\.js$/, loader: "source-map-loader", enforce: "pre"},
       { test: /\.json?$/, loader: "json"},
     ],
   },
