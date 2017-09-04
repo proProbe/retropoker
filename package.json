@@ -40,7 +40,6 @@
     "style-loader": "^0.13.2",
     "webpack": "^2.7.0",
     "webpack-dev-middleware": "^1.12.0",
-    "webpack-dev-server": "^2.7.1",
     "webpack-hot-middleware": "^2.18.2",
     "whatwg-fetch": "^2.0.3",
     "write-file-webpack-plugin": "^3.4.2"
@@ -52,7 +51,6 @@
     "source-map-loader": "^0.2.1",
     "tslint": "^5.7.0",
     "tslint-react": "^3.2.0",
-    "typescript": "^2.5.2",
-    "webpack-node-externals": "^1.6.0"
+    "typescript": "^2.5.2"
   }
 }
