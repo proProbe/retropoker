@@ -3,12 +3,10 @@ const path = require("path");
 const webpack = require("webpack");
 const webpackMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
+const config = require("./webpack.config");
 
 const isDev = process.env.NODE_ENV !== "production";
-const webpackPath = isDev ? "./webpack.config.js" : "./webpack.production.config.js";
-const config = require(webpackPath);
 const port = isDev ? 3000 : process.env.PORT;
-
 const app = express();
 
 if (isDev) {
