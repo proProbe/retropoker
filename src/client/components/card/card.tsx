@@ -1,24 +1,21 @@
 import React from "react";
+import { TCard } from "./card.types";
 
-export interface ICard {
-  id: string;
-  description: string;
-}
+type TProps = TCard & {
 
-interface IProps extends ICard {
+};
 
-}
+type TState = {
 
-interface IState {
-}
+};
 
-class Card extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class Card extends React.Component<TProps, TState> {
+  constructor(props: TProps) {
     super(props);
     this.state = this.initState();
   }
 
-  private initState(): IState {
+  private initState(): TState {
     return {};
   }
 

@@ -1,21 +1,34 @@
 import React from "react";
 import Column from "../column/column";
 import Controller from "../controller/controller";
+import { connect } from "react-redux";
+import { RootState } from "../../redux/store";
+import { returntypeof } from "react-redux-typescript";
+import { actionCreators } from "../../redux/board/actions";
+import { TBoard } from "./board.types";
 
-interface IProps {
-}
+type TProps = TBoard & typeof dispatchToProps & typeof mapStateProps & {
 
-interface IState {
-}
+};
 
-class Board extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type TState = {
+};
+
+class Board extends React.Component<TProps, TState> {
+  constructor(props: TProps) {
     super(props);
     this.state = this.initState();
   }
 
-  private initState(): IState {
+  private initState(): TState {
     return {};
+  }
+
+  private renderColumns(): JSX.Element[] {
+    return this.props.columns.map((c) => {
+      const {id, title, cards} = c;
+      return <Column key={id} id={id} title={title} cards={cards} />;
+    });
   }
 
   public render(): JSX.Element {
@@ -31,13 +44,26 @@ class Board extends React.Component<IProps, IState> {
         }}
       >
         <Controller />
-        <Column />
-        <Column />
-        <Column />
-        <Column />
+        {this.renderColumns()}
       </div>
     );
   }
 }
 
-export default Board;
+// export default Board;
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    columns: state.board.columns,
+  };
+};
+
+const mapStateProps = returntypeof(mapStateToProps);
+const dispatchToProps = {
+  addCardToColumn: actionCreators.addCardToColumn,
+};
+
+export default connect(
+  mapStateToProps,
+  dispatchToProps,
+)(Board);

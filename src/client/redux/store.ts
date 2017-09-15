@@ -1,14 +1,14 @@
 import { createStore, applyMiddleware, compose, combineReducers, Reducer } from "redux";
-import { ICardState, cardReducer } from "./card/reducer";
+import { TBoardState, boardReducer } from "./board/reducer";
 
 const isDev = process.env.NODE_ENV === "development";
 
 export type RootState = {
-  cardState: ICardState;
+  board: TBoardState,
 };
 
 const rootReducer: Reducer<RootState> = combineReducers({
-  cardState: cardReducer,
+  board: boardReducer,
 });
 
 const configureStore = (initialState?: RootState) => {

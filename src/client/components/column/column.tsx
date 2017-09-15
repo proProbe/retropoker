@@ -1,38 +1,27 @@
 import React from "react";
 import Card from "../card/card";
 import _ from "lodash";
+import { TColumn } from "./column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import { returntypeof } from "react-redux-typescript";
-import { actionCreators } from "../../redux/card/actions";
+import { actionCreators } from "../../redux/board/actions";
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    cardState: state.cardState,
-  };
-};
+type TProps = TColumn & typeof dispatchToProps;
+type TState = {};
 
-const dispatchToProps = {
-  addCard: actionCreators.addCard,
-};
-
-const stateProps = returntypeof(mapStateToProps);
-type Props = typeof stateProps & typeof dispatchToProps;
-
-type State = {};
-
-class Column extends React.Component<Props, State> {
-  constructor(props: Props) {
+class Column extends React.Component<TProps, TState> {
+  constructor(props: TProps) {
     super(props);
     this.state = this.initState();
   }
 
-  private initState(): State {
+  private initState(): TState {
     return {};
   }
 
   private renderCards(): JSX.Element[] {
-    return this.props.cardState.cards.map((card) => {
+    return this.props.cards.map((card) => {
       return (
         <Card key={card.id} id={card.id} description={card.description} />
       );
@@ -40,10 +29,11 @@ class Column extends React.Component<Props, State> {
   }
 
   private addCard = (): void => {
-    this.props.addCard(
+    this.props.addCardToColumn(
+      this.props.id,
       {
         id: _.uniqueId("card"),
-        description: "123",
+        description: _.uniqueId("sometext"),
       },
     );
   }
@@ -79,7 +69,11 @@ class Column extends React.Component<Props, State> {
   }
 }
 
+const dispatchToProps = {
+  addCardToColumn: actionCreators.addCardToColumn,
+};
+
 export default connect(
-  mapStateToProps,
+  (state: RootState) => ({}),
   dispatchToProps,
 )(Column);
