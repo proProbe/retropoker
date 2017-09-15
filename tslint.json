@@ -5,6 +5,7 @@
   ],
   "rulesDirectory": [],
   "rules": {
+    "eofline": false,
     "member-ordering": [
       true,
       {
@@ -19,7 +20,10 @@
       }
     ],
     "no-empty-interface": false,
+    "interface-over-type-literal": false,
     "object-literal-sort-keys": false,
+    "object-literal-shorthand": false,
+    "ordered-imports": false,
     "jsx-no-multiline-js": false
   },
   "jsRules": {}

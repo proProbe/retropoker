@@ -31,7 +31,7 @@ const options = {
   },
   resolve: {
     alias: alias,
-    extensions: [".js", ".jsx", ".css", ".tsx", ".json"],
+    extensions: [".js", ".jsx", ".css", ".tsx", ".json", ".ts"],
   },
   plugins: [
     new HtmlWebpackPlugin({

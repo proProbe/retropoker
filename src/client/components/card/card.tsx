@@ -1,12 +1,18 @@
 import React from "react";
 
-interface IProps {
+export interface ICard {
+  id: string;
+  description: string;
+}
+
+interface IProps extends ICard {
+
 }
 
 interface IState {
 }
 
-class Main extends React.Component<IProps, IState> {
+class Card extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = this.initState();
@@ -26,10 +32,10 @@ class Main extends React.Component<IProps, IState> {
           alignItems: "center",
         }}
       >
-        Card
+        {this.props.description}
       </div>
     );
   }
 }
 
-export default Main;
+export default Card;
