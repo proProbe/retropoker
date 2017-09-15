@@ -21,11 +21,11 @@ const options = {
   entry: {
     index: [
       "webpack-hot-middleware/client?reload=true",
-      path.join(__dirname, "src", "index.tsx"),
+      path.join(__dirname, "src", "client", "index.tsx")
     ]
   },
   output: {
-    path: path.join(__dirname, "dist"),
+    path: path.join(__dirname, "dist", "client"),
     filename: "[name].bundle.js",
     publicPath: "/"
   },
@@ -35,7 +35,7 @@ const options = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src", "index.html"),
+      template: path.join(__dirname, "src", "client", "index.html"),
       filename: "index.html",
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),

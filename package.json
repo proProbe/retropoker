@@ -6,7 +6,7 @@
   "scripts": {
     "test": "",
     "build": "rimraf dist && cross-env NODE_ENV=production webpack --config ./webpack.production.config.js --progress --profile --colors",
-    "start": "rimraf dist && node server.js"
+    "start": "rimraf dist && node src/server/server.js"
   },
   "repository": {
     "type": "git",

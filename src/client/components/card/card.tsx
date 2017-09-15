@@ -17,7 +17,18 @@ class Main extends React.Component<IProps, IState> {
   }
 
   public render(): JSX.Element {
-    return <div>Hello</div>;
+    return (
+      <div
+        style={{
+          backgroundColor: "pink",
+          minHeight: 30,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        Card
+      </div>
+    );
   }
 }
 

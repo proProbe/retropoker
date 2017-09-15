@@ -18,7 +18,9 @@
         ]
       }
     ],
-    "no-empty-interface": false
+    "no-empty-interface": false,
+    "object-literal-sort-keys": false,
+    "jsx-no-multiline-js": false
   },
   "jsRules": {}
 }
