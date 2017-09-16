@@ -1,19 +1,17 @@
 import React from "react";
 import Board from "./board/board";
 
-interface IProps {
-}
+type TProps = { };
 
-interface IState {
-}
+type TState = { };
 
-class Main extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class Main extends React.Component<TProps, TState> {
+  constructor(props: TProps) {
     super(props);
     this.state = this.initState();
   }
 
-  private initState(): IState {
+  private initState(): TState {
     return {};
   }
 

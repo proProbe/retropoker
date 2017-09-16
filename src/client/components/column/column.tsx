@@ -4,7 +4,6 @@ import _ from "lodash";
 import { TColumn } from "./column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
-import { returntypeof } from "react-redux-typescript";
 import { actionCreators } from "../../redux/board/actions";
 
 type TProps = TColumn & typeof dispatchToProps;
@@ -21,11 +20,7 @@ class Column extends React.Component<TProps, TState> {
   }
 
   private renderCards(): JSX.Element[] {
-    return this.props.cards.map((card) => {
-      return (
-        <Card key={card.id} id={card.id} description={card.description} />
-      );
-    });
+    return this.props.cards.map((card) => <Card key={card.id} {...card} />);
   }
 
   private addCard = (): void => {
@@ -33,7 +28,8 @@ class Column extends React.Component<TProps, TState> {
       this.props.id,
       {
         id: _.uniqueId("card"),
-        description: _.uniqueId("sometext"),
+        description: "",
+        status: "hidden",
       },
     );
   }
@@ -50,6 +46,7 @@ class Column extends React.Component<TProps, TState> {
           flexDirection: "column",
         }}
       >
+        {this.props.title}
         <div
           style={{
             backgroundColor: "gray",

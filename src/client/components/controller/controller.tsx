@@ -1,19 +1,28 @@
 import React from "react";
+import { TController } from "./controller.types";
+import { connect } from "react-redux";
+import { RootState } from "../../redux/store";
+import { returntypeof } from "../../utils/utils";
+import { actionCreators } from "../../redux/board/actions";
 
-interface IProps {
-}
+type TProps = TController & typeof dispatchToProps & typeof mapStateProps & {
 
-interface IState {
-}
+};
 
-class Controller extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type TState = { };
+
+class Controller extends React.Component<TProps, TState> {
+  constructor(props: TProps) {
     super(props);
     this.state = this.initState();
   }
 
-  private initState(): IState {
+  private initState(): TState {
     return {};
+  }
+
+  private changeAllCardsStatus = (): void => {
+    this.props.changeBoardState("showing");
   }
 
   public render(): JSX.Element {
@@ -26,7 +35,7 @@ class Controller extends React.Component<IProps, IState> {
           flexDirection: "column",
         }}
       >
-        <div>
+        <div onClick={this.changeAllCardsStatus}>
           Hidden Mode
         </div>
         <div>
@@ -37,4 +46,17 @@ class Controller extends React.Component<IProps, IState> {
   }
 }
 
-export default Controller;
+const mapStateToProps = (state: RootState) => {
+  return {
+  };
+};
+
+const mapStateProps = returntypeof(mapStateToProps);
+const dispatchToProps = {
+  changeBoardState: actionCreators.changeBoardState,
+};
+
+export default connect(
+  mapStateToProps,
+  dispatchToProps,
+)(Controller);

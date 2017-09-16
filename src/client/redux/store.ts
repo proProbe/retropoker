@@ -1,10 +1,12 @@
 import { createStore, applyMiddleware, compose, combineReducers, Reducer } from "redux";
-import { TBoardState, boardReducer } from "./board/reducer";
+import { boardReducer } from "./board/reducer";
+import logger from "redux-logger";
+import { TBoard } from "../components/board/board.types";
 
 const isDev = process.env.NODE_ENV === "development";
 
 export type RootState = {
-  board: TBoardState,
+  board: TBoard,
 };
 
 const rootReducer: Reducer<RootState> = combineReducers({
@@ -14,7 +16,9 @@ const rootReducer: Reducer<RootState> = combineReducers({
 const configureStore = (initialState?: RootState) => {
   // compose enhancers
   const enhancer = isDev
-    ? compose()
+    ? compose(
+      applyMiddleware(logger),
+    )
     : compose();
 
   // create store
