@@ -50,7 +50,8 @@ const options = {
   ],
   module: {
     rules: [
-      { test: /\.css$/, loader: "style-loader!css-loader", exclude: /node_modules/ },
+      { test: /\.css$/, loader: "style-loader!css-loader" },
+      { test   : /\.(ttf|eot|svg|png|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader : 'file-loader' },
       { test: /\.tsx?$/, loaders: ["babel-loader", "awesome-typescript-loader"]},
       { test: /\.js$/, loader: "source-map-loader", enforce: "pre"},
       { test: /\.json?$/, loader: "json"},

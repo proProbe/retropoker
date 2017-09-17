@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import { returntypeof } from "../../utils/utils";
 import { actionCreators } from "../../redux/board/actions";
+import { Button, Divider } from "semantic-ui-react";
 
 type TProps = TController & typeof dispatchToProps & typeof mapStateProps & {
 
@@ -33,11 +34,16 @@ class Controller extends React.Component<TProps, TState> {
           display: "flex",
           marginRight: 5,
           flexDirection: "column",
+          maxWidth: 100,
         }}
       >
-        <div onClick={this.changeAllCardsStatus}>
+        <Button onClick={this.changeAllCardsStatus}>
           Hidden Mode
-        </div>
+        </Button>
+        <Button onClick={this.changeAllCardsStatus}>
+          Join
+        </Button>
+        <Divider horizontal>Players</Divider>
         <div>
           Players
         </div>

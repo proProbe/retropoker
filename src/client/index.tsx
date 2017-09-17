@@ -3,6 +3,7 @@ import { Provider } from "react-redux";
 import ReactDom from "react-dom";
 import Store from "./redux/store";
 import Main from "./components/Main";
+import "semantic-ui-css/semantic.min.css";
 
 const App = () => {
   return (

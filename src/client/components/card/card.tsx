@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import { returntypeof } from "../../utils/utils";
 import { actionCreators } from "../../redux/board/actions";
+import { Form, TextArea, Button, Segment } from "semantic-ui-react";
 
 type TProps = TCard & typeof dispatchToProps & typeof mapStateProps & {
 
@@ -58,29 +59,35 @@ class Card extends React.Component<TProps, TState> {
   }
 
   private renderNote = (): JSX.Element => {
+    const color = this.getCardColor();
     return (
-      <div
+      <Segment
         style={{
-          backgroundColor: this.getCardColor(),
           minHeight: 30,
           display: "flex",
           alignItems: "center",
         }}
         onClick={this.onClick}
+        inverted
+        color="green"
       >
         {this.props.description}
-      </div>
+      </Segment>
     );
   }
 
   private renderForm = (): JSX.Element => {
     return (
-      <form onSubmit={this.onClick}>
-        <label>
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+      <Form onSubmit={this.onClick} style={{display: "flex"}}>
+        <TextArea
+          rows={2}
+          autoHeight={true}
+          placeholder="..."
+          value={this.state.value}
+          onChange={this.handleChange}
+        />
+        <Button type="submit">Add</ Button>
+      </Form>
     );
   }
 

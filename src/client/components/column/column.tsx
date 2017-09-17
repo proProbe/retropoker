@@ -5,6 +5,7 @@ import { TColumn } from "./column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import { actionCreators } from "../../redux/board/actions";
+import { Button, Header } from "semantic-ui-react";
 
 type TProps = TColumn & typeof dispatchToProps;
 type TState = {};
@@ -42,25 +43,19 @@ class Column extends React.Component<TProps, TState> {
           backgroundColor: "yellow",
           display: "flex",
           margin: "0 5px",
-          flexGrow: 1,
+          flex: 1,
           flexDirection: "column",
         }}
       >
-        {this.props.title}
-        <div
-          style={{
-            backgroundColor: "gray",
-            minHeight: 40,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 20,
-          }}
+        <Header as="h3">{this.props.title}</Header>
+        <Button
           onClick={this.addCard}
         >
           Add card
+        </Button>
+        <div style={{paddingTop: 20}}>
+          {this.renderCards()}
         </div>
-        {this.renderCards()}
       </div>
     );
   }
