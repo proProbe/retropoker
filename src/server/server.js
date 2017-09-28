@@ -38,7 +38,7 @@ if (isDev) {
   });
 }
 
-app.listen(port, "localhost", (err, res) => {
+app.listen(port, "0.0.0.0", (err, res) => {
   if (err) {
     return console.log(err);
   }

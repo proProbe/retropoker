@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import { returntypeof } from "../../utils/utils";
 import { actionCreators } from "../../redux/board/actions";
-import { Form, TextArea, Button, Segment } from "semantic-ui-react";
+import { SemanticCOLORS, Form, TextArea, Button, Segment } from "semantic-ui-react";
 
 type TProps = TCard & typeof dispatchToProps & typeof mapStateProps & {
 
@@ -23,7 +23,7 @@ class Card extends React.Component<TProps, TState> {
 
   private initState = (): TState => {
     return {
-      isEditing: true,
+      isEditing: false,
       value: "",
     };
   }
@@ -45,10 +45,10 @@ class Card extends React.Component<TProps, TState> {
     });
   }
 
-  private getCardColor = (): string => {
-    // if (this.props.boardState === "hidden") {
-    //   return "gray";
-    // }
+  private getCardColor = (): SemanticCOLORS => {
+    if (this.props.boardState === "hidden") {
+      return "grey";
+    }
 
     switch (this.props.status) {
       case "unread":
@@ -69,7 +69,7 @@ class Card extends React.Component<TProps, TState> {
         }}
         onClick={this.onClick}
         inverted
-        color="green"
+        color={color}
       >
         {this.props.description}
       </Segment>
@@ -78,15 +78,17 @@ class Card extends React.Component<TProps, TState> {
 
   private renderForm = (): JSX.Element => {
     return (
-      <Form onSubmit={this.onClick} style={{display: "flex"}}>
-        <TextArea
-          rows={2}
-          autoHeight={true}
-          placeholder="..."
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
-        <Button type="submit">Add</ Button>
+      <Form onSubmit={this.onClick}>
+        <div style={{display: "flex"}}>
+          <TextArea
+            rows={2}
+            autoHeight={true}
+            placeholder="..."
+            value={this.state.value}
+            onChange={this.handleChange}
+          />
+          <Button type="submit">Add</ Button>
+        </div>
       </Form>
     );
   }
@@ -100,7 +102,7 @@ class Card extends React.Component<TProps, TState> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    // boardState: state.board.state,
+    boardState: state.board.state,
   };
 };
 
@@ -110,6 +112,6 @@ const dispatchToProps = {
 };
 
 export default connect(
-  (state: RootState) => ({}),
+  mapStateToProps,
   dispatchToProps,
 )(Card);
