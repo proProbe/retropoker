@@ -4,16 +4,16 @@ import {
   ADD_CARD_TO_COLUMN_ACTION,
   CHANGE_ALL_CARD_STATUS,
   CHANGE_ALL_CARD_STATUS_ACTION,
-  CHANGE_CARD_DESCRIPTION,
-  CHANGE_CARD_DESCRIPTION_ACTION,
   CHANGE_BOARD_STATE,
   CHANGE_BOARD_STATE_ACTION,
+  CHANGE_CARD,
+  CHANGE_CARD_ACTION,
 } from "./actions";
 
 type BoardAction
   = ADD_CARD_TO_COLUMN_ACTION
   | CHANGE_ALL_CARD_STATUS_ACTION
-  | CHANGE_CARD_DESCRIPTION_ACTION
+  | CHANGE_CARD_ACTION
   | CHANGE_BOARD_STATE_ACTION;
 
 export const initialBoardState: TBoard = {
@@ -62,18 +62,15 @@ export const boardReducer = (state: TBoard = initialBoardState, action: BoardAct
       };
     }
 
-    case CHANGE_CARD_DESCRIPTION: {
-      const {cardId, description} = action;
-      const newColumns = state.columns.map((c) => {
-        const newCards = c.cards.map((card) => {
-          if (cardId !== card.id) { return card; }
-          return {
-            ...card,
-            description: action.description,
-          };
+    case CHANGE_CARD: {
+      const {card: changedCard} = action;
+      const newColumns = state.columns.map((col) => {
+        const newCards = col.cards.map((card) => {
+          if (card.id !== changedCard.id) { return card; }
+          return changedCard;
         });
         return {
-          ...c,
+          ...col,
           cards: newCards,
         };
       });

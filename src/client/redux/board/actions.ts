@@ -14,11 +14,10 @@ export type CHANGE_ALL_CARD_STATUS_ACTION = {
   status: TCardStatus,
 };
 
-export const CHANGE_CARD_DESCRIPTION = "CHANGE_CARD_DESCRIPTION";
-export type CHANGE_CARD_DESCRIPTION_ACTION = {
-  type: typeof CHANGE_CARD_DESCRIPTION,
-  cardId: string,
-  description: string,
+export const CHANGE_CARD = "CHANGE_CARD";
+export type CHANGE_CARD_ACTION = {
+  type: typeof CHANGE_CARD,
+  card: TCard,
 };
 
 export const CHANGE_BOARD_STATE = "CHANGE_BOARD_STATE";
@@ -38,10 +37,9 @@ export const actionCreators = {
     type: CHANGE_ALL_CARD_STATUS,
     status: status,
   }),
-  changeCardDescription: (cardId: string, description: string): CHANGE_CARD_DESCRIPTION_ACTION => ({
-    type: CHANGE_CARD_DESCRIPTION,
-    cardId: cardId,
-    description: description,
+  changeCard: (card: TCard): CHANGE_CARD_ACTION => ({
+    type: CHANGE_CARD,
+    card: card,
   }),
   changeBoardState: (boardState: TBoardState): CHANGE_BOARD_STATE_ACTION => ({
     type: CHANGE_BOARD_STATE,

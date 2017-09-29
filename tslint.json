@@ -27,7 +27,8 @@
     "ordered-imports": false,
     "jsx-no-multiline-js": false,
     "jsx-boolean-value": false,
-    "no-empty": false
+    "no-empty": false,
+    "no-console": [true, "log"]
   },
   "jsRules": {}
 }
