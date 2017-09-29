@@ -6,6 +6,7 @@ import { TColumn } from "./column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import { actionCreators } from "../../redux/board/actions";
+import * as errActionHandler from "../../redux/errorHandler/actions";
 import { Button, Header, Modal, Icon, Form } from "semantic-ui-react";
 import TextArea from "../common/textarea/textArea";
 
@@ -41,7 +42,8 @@ class Column extends React.Component<TProps, TState> {
 
   private confirmModal = (): void => {
     if (!this.state.card) {
-      return console.error("Could not confirm with no card");
+      this.props.throwError({ message: "Could not confirm with no card", type: "warning" });
+      return;
     }
     switch (this.state.card.status) {
       case "add":
@@ -69,8 +71,10 @@ class Column extends React.Component<TProps, TState> {
     const cardToChange = this.props.cards.find((card): boolean => {
       return card.id === cardId;
     });
+    this.props.throwError({ message: "No card with ID: " + cardId, type: "warning" });
     if (!cardToChange) {
-      return console.error("No card with ID:", cardId);
+      this.props.throwError({ message: "No card with ID: " + cardId, type: "warning" });
+      return;
     }
     const updatedCardToChange: TCard = {
       ...cardToChange,
@@ -84,7 +88,8 @@ class Column extends React.Component<TProps, TState> {
 
   private handleCardChange = (event: React.SyntheticEvent<any>): void => {
     if (!this.state.card) {
-      return console.error("No card to add the description too");
+      this.props.throwError({ message: "No card to add the description too", type: "warning" });
+      return;
     }
     const target = event.target as HTMLInputElement;
     return this.setState({
@@ -184,6 +189,7 @@ class Column extends React.Component<TProps, TState> {
 const dispatchToProps = {
   addCardToColumn: actionCreators.addCardToColumn,
   changeCard: actionCreators.changeCard,
+  throwError: errActionHandler.actionCreators.throwError,
 };
 
 export default connect(

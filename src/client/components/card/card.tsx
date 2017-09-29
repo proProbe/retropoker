@@ -7,7 +7,7 @@ import { actionCreators } from "../../redux/board/actions";
 import { SemanticCOLORS, Form, TextArea, Button, Segment } from "semantic-ui-react";
 
 type TProps = TCard & typeof mapStateProps & {
-  onClick: (cardId: string) => void;
+  onClick: (cardId: string) => void,
 };
 
 type TState = {

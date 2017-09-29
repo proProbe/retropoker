@@ -1,16 +1,19 @@
 import { createStore, applyMiddleware, compose, combineReducers, Reducer } from "redux";
-import { boardReducer } from "./board/reducer";
 import logger from "redux-logger";
+import { boardReducer } from "./board/reducer";
 import { TBoard } from "../components/board/board.types";
+import { errorHandlerReducer, TErrorHandlerState } from "./errorHandler/reducer";
 
 const isDev = process.env.NODE_ENV === "development";
 
 export type RootState = {
   board: TBoard,
+  errorHandler: TErrorHandlerState,
 };
 
 const rootReducer: Reducer<RootState> = combineReducers({
   board: boardReducer,
+  errorHandler: errorHandlerReducer,
 });
 
 const configureStore = (initialState?: RootState) => {

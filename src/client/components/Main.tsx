@@ -1,5 +1,6 @@
 import React from "react";
 import Board from "./board/board";
+import ErrorModal from "./common/errorHandlers/modal/errorModal";
 
 type TProps = { };
 
@@ -26,6 +27,7 @@ class Main extends React.Component<TProps, TState> {
         }}
       >
         <Board />
+        <ErrorModal />
       </div>)
     ;
   }
