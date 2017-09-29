@@ -1,8 +1,10 @@
 import { createStore, applyMiddleware, compose, combineReducers, Reducer } from "redux";
+import { createEpicMiddleware } from "redux-observable";
 import logger from "redux-logger";
 import { boardReducer } from "./board/reducer";
 import { TBoard } from "../components/board/board.types";
 import { errorHandlerReducer, TErrorHandlerState } from "./errorHandler/reducer";
+import rootEpic from "./epics/index";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -16,13 +18,21 @@ const rootReducer: Reducer<RootState> = combineReducers({
   errorHandler: errorHandlerReducer,
 });
 
+const epicMiddleware = createEpicMiddleware(rootEpic);
 const configureStore = (initialState?: RootState) => {
   // compose enhancers
   const enhancer = isDev
     ? compose(
-      applyMiddleware(logger),
+      applyMiddleware(
+        logger,
+        epicMiddleware,
+      ),
     )
-    : compose();
+    : compose(
+        applyMiddleware(
+          epicMiddleware,
+        ),
+    );
 
   // create store
   return createStore<RootState>(

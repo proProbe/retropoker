@@ -6,7 +6,7 @@ import {
   RESOLVE_ERROR_ACTION,
 } from "./actions";
 
-type TErrorAction
+export type TErrorAction
   = THROW_ERROR_ACTION
   | RESOLVE_ERROR_ACTION;
 

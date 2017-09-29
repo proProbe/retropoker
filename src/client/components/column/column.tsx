@@ -5,8 +5,9 @@ import _ from "lodash";
 import { TColumn } from "./column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
-import { actionCreators } from "../../redux/board/actions";
-import * as errActionHandler from "../../redux/errorHandler/actions";
+import * as boardActions from "../../redux/board/actions";
+import * as errorHandlerActions from "../../redux/errorHandler/actions";
+import * as pingActions from "../../redux/epics/ping";
 import { Button, Header, Modal, Icon, Form } from "semantic-ui-react";
 import TextArea from "../common/textarea/textArea";
 
@@ -186,9 +187,10 @@ class Column extends React.Component<TProps, TState> {
 }
 
 const dispatchToProps = {
-  addCardToColumn: actionCreators.addCardToColumn,
-  changeCard: actionCreators.changeCard,
-  throwError: errActionHandler.actionCreators.throwError,
+  addCardToColumn: boardActions.actionCreators.addCardToColumn,
+  changeCard: boardActions.actionCreators.changeCard,
+  throwError: errorHandlerActions.actionCreators.throwError,
+  ping: pingActions.actionCreators.ping,
 };
 
 export default connect(
