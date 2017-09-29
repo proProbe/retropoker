@@ -24,7 +24,10 @@ class Card extends React.Component<TProps, TState> {
   }
 
   private onClick = (): void => {
-    this.props.onClick(this.props.id);
+    if (this.props.boardState === "hidden") {
+      return;
+    }
+    return this.props.onClick(this.props.id);
   }
 
   private getCardColor = (): SemanticCOLORS => {

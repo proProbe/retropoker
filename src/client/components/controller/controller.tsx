@@ -22,8 +22,16 @@ class Controller extends React.Component<TProps, TState> {
     return {};
   }
 
-  private changeAllCardsStatus = (): void => {
-    this.props.changeBoardState("showing");
+  private changeBoardState = (): void => {
+    switch (this.props.boardState) {
+      case "showing": {
+        this.props.changeBoardState("hidden");
+        return;
+      }
+      default:
+        this.props.changeBoardState("showing");
+        return;
+    }
   }
 
   public render(): JSX.Element {
@@ -37,10 +45,13 @@ class Controller extends React.Component<TProps, TState> {
           maxWidth: 100,
         }}
       >
-        <Button onClick={this.changeAllCardsStatus}>
-          Hidden Mode
+        <Button onClick={this.changeBoardState}>
+          { this.props.boardState === "hidden"
+            ? "Hidden Mode"
+            : "Showing Mode"
+          }
         </Button>
-        <Button onClick={this.changeAllCardsStatus}>
+        <Button onClick={this.changeBoardState}>
           Join
         </Button>
         <Divider horizontal>Players</Divider>
@@ -54,6 +65,7 @@ class Controller extends React.Component<TProps, TState> {
 
 const mapStateToProps = (state: RootState) => {
   return {
+    boardState: state.board.state,
   };
 };
 
