@@ -71,7 +71,6 @@ class Column extends React.Component<TProps, TState> {
     const cardToChange = this.props.cards.find((card): boolean => {
       return card.id === cardId;
     });
-    this.props.throwError({ message: "No card with ID: " + cardId, type: "warning" });
     if (!cardToChange) {
       this.props.throwError({ message: "No card with ID: " + cardId, type: "warning" });
       return;
