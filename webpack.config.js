@@ -43,7 +43,9 @@ const options = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       "process.env": {
-        "NODE_ENV": JSON.stringify(env.NODE_ENV)
+        "NODE_ENV": JSON.stringify(env.NODE_ENV),
+        "PORT": JSON.stringify(env.PORT),
+        "WS": JSON.stringify(env.WS)
       }
     }),
     new WriteFilePlugin(),

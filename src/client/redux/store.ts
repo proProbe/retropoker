@@ -11,11 +11,32 @@ const isDev = process.env.NODE_ENV === "development";
 export type RootState = {
   board: TBoard,
   errorHandler: TErrorHandlerState,
+  tickers: any,
+};
+
+const tickers = (state = {}, action: any) => {
+  switch (action.type) {
+    case "ADD_TICKER":
+      return {
+        ...state,
+        [action.ticker]: null,
+      };
+
+    case "TICKER_TICK":
+      return {
+        ...state,
+        [action.ticker]: action.value,
+      };
+
+    default:
+      return state;
+  }
 };
 
 const rootReducer: Reducer<RootState> = combineReducers({
   board: boardReducer,
   errorHandler: errorHandlerReducer,
+  tickers: tickers,
 });
 
 const epicMiddleware = createEpicMiddleware(rootEpic);

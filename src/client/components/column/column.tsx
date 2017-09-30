@@ -8,6 +8,7 @@ import { RootState } from "../../redux/store";
 import * as boardActions from "../../redux/board/actions";
 import * as errorHandlerActions from "../../redux/errorHandler/actions";
 import * as pingActions from "../../redux/epics/ping";
+import { addTicker } from "../../redux/epics/index";
 import { Button, Header, Modal, Icon, Form } from "semantic-ui-react";
 import TextArea from "../common/textarea/textArea";
 
@@ -32,6 +33,7 @@ class Column extends React.Component<TProps, TState> {
   }
 
   private addCard = (): void => {
+    this.props.addTicker("testing ws");
     const newCard: TCard = {
         id: _.uniqueId("card"),
         description: "",
@@ -83,7 +85,7 @@ class Column extends React.Component<TProps, TState> {
     return this.showModal(updatedCardToChange);
   }
 
-  private showModal = (card: TCard): void => this.setState({showModal: true, card: card})
+  private showModal = (card: TCard): void => this.setState({showModal: true, card: card});
   private closeModal = (): void => this.setState({showModal: false, card: undefined});
 
   private handleCardChange = (event: React.SyntheticEvent<any>): void => {
@@ -191,6 +193,7 @@ const dispatchToProps = {
   changeCard: boardActions.actionCreators.changeCard,
   throwError: errorHandlerActions.actionCreators.throwError,
   ping: pingActions.actionCreators.ping,
+  addTicker: addTicker,
 };
 
 export default connect(
