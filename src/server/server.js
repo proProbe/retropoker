@@ -1,9 +1,11 @@
 const express = require("express");
+const WebSocket = require("ws");
 const path = require("path");
 const webpack = require("webpack");
 const webpackMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
 const config = require("../../webpack.config");
+const util = require("util");
 
 const isDev = process.env.NODE_ENV !== "production";
 const port = isDev ? 3000 : process.env.PORT;
@@ -38,10 +40,44 @@ if (isDev) {
   });
 }
 
-app.listen(port, "0.0.0.0", (err, res) => {
+const server = app.listen(port, "0.0.0.0", (err, res) => {
   if (err) {
     return console.log(err);
   }
   console.log(`Listening on port ${port}`);
 });
 
+const handleWSMessages = (wss, msg) => {
+  console.log(msg);
+  switch (msg.type) {
+    case "subscribe":
+      console.log("Subscribed event called");
+      break;
+    case "unsubscribe":
+      console.log("UnSubscribed event called");
+      break;
+    case "SOCKET_ADD_CARD_COLUMN":
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          const data = JSON.stringify({
+            type: "ADD_CARD_TO_COLUMN",
+            columnId: msg.columnId,
+            card: msg.card
+          });
+          client.send(data);
+        }
+      });
+    default:
+      console.log("Something else called", msg.type);
+      break;
+  }
+}
+
+const wss = new WebSocket.Server({server: server});
+wss.on("connection", (ws, req) => {
+  ws.send(JSON.stringify({msg: "GOT IT"}));
+  // console.log("connection", req);
+  ws.on("message", (msg) => {
+    handleWSMessages(wss, JSON.parse(msg));
+  });
+});

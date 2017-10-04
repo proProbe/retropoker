@@ -1,55 +1,70 @@
 import "rxjs";
-import { combineEpics } from "redux-observable";
+import { combineEpics, ActionsObservable } from "redux-observable";
 // tslint:disable-next-line
 import { Observable } from "rxjs";
 import { WebSocket } from "mock-socket";
 
 import ping from "./ping";
 
-export const addTicker = (ticker: any) => ({ type: "ADD_TICKER", ticker });
-export const removeTicker = (ticker: any) => ({ type: "REMOVE_TICKER", ticker });
+export const SOCKET_ADD_CARD = "SOCKET_ADD_CARD";
+export type SOCKET_ADD_CARD_ACTION = {
+  type: typeof SOCKET_ADD_CARD,
+};
 
-const wsPath = "ws://localhost:8080";
-const socket$ = Observable.webSocket({
+export const SOCKET_CARD_SUB = "SOCKET_CARD_SUB";
+export type SOCKET_CARD_SUB_ACTION = {
+  type: typeof SOCKET_CARD_SUB,
+};
+export const SOCKET_ADD_CARD_COLUMN = "SOCKET_ADD_CARD_COLUMN";
+export type SOCKET_ADD_CARD_COLUMN_ACTION = {
+  type: typeof SOCKET_ADD_CARD_COLUMN,
+  columnId: string,
+  card: any,
+};
+
+type TSocketActions
+  = SOCKET_ADD_CARD_ACTION
+  | SOCKET_CARD_SUB_ACTION
+  | SOCKET_ADD_CARD_COLUMN_ACTION;
+
+export const actionCreators = {
+  socketAddCard: (): SOCKET_ADD_CARD_ACTION => ({type: SOCKET_ADD_CARD}),
+  socketCardSub: (): SOCKET_CARD_SUB_ACTION => ({type: SOCKET_CARD_SUB}),
+  socketAddCardToColumn: (columnId: string, card: any): SOCKET_ADD_CARD_COLUMN_ACTION => ({
+    type: SOCKET_ADD_CARD_COLUMN,
+    columnId: columnId,
+    card: card,
+  }),
+};
+
+const wsPath = "ws://localhost:3000";
+export const socket$ = Observable.webSocket({
   url: wsPath,
-  // use mock WebSocket, not needed unless you mock too
-  WebSocketCtor: WebSocket,
 });
-// tslint:disable
-const stockTickerEpic = (action$: any, store: any) =>
-  action$.ofType('ADD_TICKER')
-    .mergeMap((action: any) =>
-      socket$.multiplex(
-        () => ({
-          type: 'subscribe',
-          ticker: action.ticker
-        }),
-        () => ({
-          type: 'unsubscribe',
-          ticker: action.ticker
-        }),
-        (msg: any) => msg.ticker === action.ticker
-      )
-      .retryWhen(err => {
-        if (window.navigator.onLine) {
-          return Observable.timer(1000);
-        } else {
-          return Observable.fromEvent(window, 'online');
-        }
-      })
-      .takeUntil(
-        action$.ofType('REMOVE_TICKER')
-          .filter((closeAction: any) => closeAction.ticker === action.ticker)
-      )
-      .map(tick => ({
-        type: "TICKER_TICK",
-        ticker: tick.ticker,
-        value: tick.value,
-      })),
-    );
+
+const wsEpic = (action$: ActionsObservable<TSocketActions>, store: any) =>
+  action$.ofType(SOCKET_CARD_SUB)
+    .mergeMap((action: TSocketActions) =>
+      socket$
+        .filter((serverAction: any) => {
+          console.log(serverAction, ["SOCKET_ADD_CARD_COLUMN"].includes(serverAction.type));
+          return [
+            "ADD_CARD_TO_COLUMN",
+          ].includes(serverAction.type);
+        })
+        .map((serverAction: any) => serverAction,
+        ),
+      );
+
+const wsAddCardEpic = (action$: ActionsObservable<TSocketActions>, store: any) =>
+  action$.ofType(SOCKET_ADD_CARD_COLUMN)
+    .map((action: TSocketActions) =>
+      socket$.next(JSON.stringify(action)),
+    ).mapTo({type: "NOOP"});
 
 const rootEpic = combineEpics(
-  ping,
-  stockTickerEpic,
+  // ping,
+  wsEpic,
+  wsAddCardEpic,
 );
 export default rootEpic;

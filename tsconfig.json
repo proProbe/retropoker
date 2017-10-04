@@ -8,7 +8,11 @@
     "sourceMap": true,
     "jsx": "preserve",
     "strict": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "lib": [
+      "dom",
+      "es2017"
+    ]
   },
   "include": [
     "./src/**/*"

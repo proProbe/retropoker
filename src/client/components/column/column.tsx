@@ -7,8 +7,7 @@ import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import * as boardActions from "../../redux/board/actions";
 import * as errorHandlerActions from "../../redux/errorHandler/actions";
-import * as pingActions from "../../redux/epics/ping";
-import { addTicker } from "../../redux/epics/index";
+import * as addCardEpicActions from "../../redux/epics/index";
 import { Button, Header, Modal, Icon, Form } from "semantic-ui-react";
 import TextArea from "../common/textarea/textArea";
 
@@ -33,7 +32,6 @@ class Column extends React.Component<TProps, TState> {
   }
 
   private addCard = (): void => {
-    this.props.addTicker("testing ws");
     const newCard: TCard = {
         id: _.uniqueId("card"),
         description: "",
@@ -50,7 +48,8 @@ class Column extends React.Component<TProps, TState> {
     }
     switch (this.state.card.status) {
       case "add":
-        this.props.addCardToColumn(
+        this.props.socketAddCardToColumn(
+        // this.props.addCardToColumn(
           this.props.id,
           {
             ...this.state.card,
@@ -192,8 +191,7 @@ const dispatchToProps = {
   addCardToColumn: boardActions.actionCreators.addCardToColumn,
   changeCard: boardActions.actionCreators.changeCard,
   throwError: errorHandlerActions.actionCreators.throwError,
-  ping: pingActions.actionCreators.ping,
-  addTicker: addTicker,
+  socketAddCardToColumn: addCardEpicActions.actionCreators.socketAddCardToColumn,
 };
 
 export default connect(
