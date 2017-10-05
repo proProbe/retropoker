@@ -26,6 +26,14 @@ export type CHANGE_BOARD_STATE_ACTION = {
   state: string,
 };
 
+export const INIT_BOARD = "INIT_BOARD";
+export type INIT_BOARD_ACTION = {
+  type: typeof INIT_BOARD,
+  board: {
+    cards: Array<{columnId: string, card: TCard}>,
+  },
+};
+
 // Action Creators
 export const actionCreators = {
   addCardToColumn: (columnId: string, card: TCard): ADD_CARD_TO_COLUMN_ACTION => ({

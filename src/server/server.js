@@ -47,24 +47,32 @@ const server = app.listen(port, "0.0.0.0", (err, res) => {
   console.log(`Listening on port ${port}`);
 });
 
-const handleWSMessages = (wss, msg) => {
+const cards = [{
+  columnId: "3",
+  card: {
+    id: "new right",
+    description: "this was here before!",
+    status: "hidden",
+  },
+}];
+
+const handleWSMessages = (wss, ws, msg) => {
   console.log(msg);
   switch (msg.type) {
-    case "subscribe":
-      console.log("Subscribed event called");
-      break;
-    case "unsubscribe":
-      console.log("UnSubscribed event called");
-      break;
+    case "SOCKET_GET_BOARD_STATE":
+      ws.send(JSON.stringify({type: "INIT_BOARD", board: {cards: cards}}));
     case "SOCKET_ADD_CARD_COLUMN":
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          const data = JSON.stringify({
-            type: "ADD_CARD_TO_COLUMN",
+          const data = {
             columnId: msg.columnId,
             card: msg.card
-          });
-          client.send(data);
+          }
+          cards.push(data);
+          client.send(JSON.stringify({
+            type: "ADD_CARD_TO_COLUMN",
+            ...data
+          }));
         }
       });
     default:
@@ -75,9 +83,10 @@ const handleWSMessages = (wss, msg) => {
 
 const wss = new WebSocket.Server({server: server});
 wss.on("connection", (ws, req) => {
-  ws.send(JSON.stringify({msg: "GOT IT"}));
+  ws.send(JSON.stringify({type: "INIT_BOARD", board: {cards: cards}}));
+  // ws.send(JSON.stringify({msg: "GOT IT"}));
   // console.log("connection", req);
   ws.on("message", (msg) => {
-    handleWSMessages(wss, JSON.parse(msg));
+    handleWSMessages(wss, ws, JSON.parse(msg));
   });
 });

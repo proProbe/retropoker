@@ -4,8 +4,6 @@ import { combineEpics, ActionsObservable } from "redux-observable";
 import { Observable } from "rxjs";
 import { WebSocket } from "mock-socket";
 
-import ping from "./ping";
-
 export const SOCKET_ADD_CARD = "SOCKET_ADD_CARD";
 export type SOCKET_ADD_CARD_ACTION = {
   type: typeof SOCKET_ADD_CARD,
@@ -46,24 +44,19 @@ const wsEpic = (action$: ActionsObservable<TSocketActions>, store: any) =>
   action$.ofType(SOCKET_CARD_SUB)
     .mergeMap((action: TSocketActions) =>
       socket$
-        .filter((serverAction: any) => {
-          console.log(serverAction, ["SOCKET_ADD_CARD_COLUMN"].includes(serverAction.type));
-          return [
+        .filter((serverAction: any) => [
             "ADD_CARD_TO_COLUMN",
-          ].includes(serverAction.type);
-        })
-        .map((serverAction: any) => serverAction,
-        ),
-      );
+            "INIT_BOARD",
+          ].includes(serverAction.type))
+        .map((serverAction: any) => serverAction),
+    );
 
 const wsAddCardEpic = (action$: ActionsObservable<TSocketActions>, store: any) =>
   action$.ofType(SOCKET_ADD_CARD_COLUMN)
-    .map((action: TSocketActions) =>
-      socket$.next(JSON.stringify(action)),
-    ).mapTo({type: "NOOP"});
+    .map((action: TSocketActions) => socket$.next(JSON.stringify(action)))
+    .mapTo({type: "NOOP"});
 
 const rootEpic = combineEpics(
-  // ping,
   wsEpic,
   wsAddCardEpic,
 );

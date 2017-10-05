@@ -8,13 +8,16 @@ import {
   CHANGE_BOARD_STATE_ACTION,
   CHANGE_CARD,
   CHANGE_CARD_ACTION,
+  INIT_BOARD,
+  INIT_BOARD_ACTION,
 } from "./actions";
 
 type BoardAction
   = ADD_CARD_TO_COLUMN_ACTION
   | CHANGE_ALL_CARD_STATUS_ACTION
   | CHANGE_CARD_ACTION
-  | CHANGE_BOARD_STATE_ACTION;
+  | CHANGE_BOARD_STATE_ACTION
+  | INIT_BOARD_ACTION;
 
 export const initialBoardState: TBoard = {
   state: "hidden",
@@ -85,6 +88,24 @@ export const boardReducer = (state: TBoard = initialBoardState, action: BoardAct
       return {
         ...state,
         state: boardState,
+      };
+    }
+
+    case INIT_BOARD: {
+      const cards = action.board.cards;
+      const newColumns = state.columns.map((col) => {
+        const newColCards = cards
+          .filter(card => card.columnId === col.id)
+          .map(card => card.card);
+        return {
+          ...col,
+          cards: [...col.cards, ...newColCards],
+        };
+      });
+
+      return {
+        ...state,
+        columns: newColumns,
       };
     }
 
