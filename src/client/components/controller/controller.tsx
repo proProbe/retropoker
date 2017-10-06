@@ -3,7 +3,8 @@ import { TController } from "./controller.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import { returntypeof } from "../../utils/utils";
-import { actionCreators } from "../../redux/board/actions";
+import * as boardActions from "../../redux/board/actions";
+import * as socketActions from "../../redux/epics/index";
 import { Button, Divider } from "semantic-ui-react";
 
 type TProps = TController & typeof dispatchToProps & typeof mapStateProps & {
@@ -25,11 +26,13 @@ class Controller extends React.Component<TProps, TState> {
   private changeBoardState = (): void => {
     switch (this.props.boardState) {
       case "showing": {
-        this.props.changeBoardState("hidden");
+        this.props.socketChangeBoardState("hidden");
+        // this.props.changeBoardState("hidden");
         return;
       }
       default:
-        this.props.changeBoardState("showing");
+        this.props.socketChangeBoardState("showing");
+        // this.props.changeBoardState("showing");
         return;
     }
   }
@@ -71,7 +74,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapStateProps = returntypeof(mapStateToProps);
 const dispatchToProps = {
-  changeBoardState: actionCreators.changeBoardState,
+  changeBoardState: boardActions.actionCreators.changeBoardState,
+  socketChangeBoardState: socketActions.actionCreators.socketChangeBoardState,
 };
 
 export default connect(

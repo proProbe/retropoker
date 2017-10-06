@@ -30,6 +30,7 @@ export const INIT_BOARD = "INIT_BOARD";
 export type INIT_BOARD_ACTION = {
   type: typeof INIT_BOARD,
   board: {
+    state: string,
     cards: Array<{columnId: string, card: TCard}>,
   },
 };

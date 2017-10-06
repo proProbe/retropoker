@@ -11,6 +11,7 @@ import {
   INIT_BOARD,
   INIT_BOARD_ACTION,
 } from "./actions";
+import _ from "lodash";
 
 type BoardAction
   = ADD_CARD_TO_COLUMN_ACTION
@@ -99,12 +100,14 @@ export const boardReducer = (state: TBoard = initialBoardState, action: BoardAct
           .map(card => card.card);
         return {
           ...col,
-          cards: [...col.cards, ...newColCards],
+          state: action.board.state,
+          cards: _.uniqBy([...col.cards, ...newColCards], "id"),
         };
       });
 
       return {
         ...state,
+        state: action.board.state,
         columns: newColumns,
       };
     }
