@@ -56,7 +56,6 @@ export const socket$ = Observable.webSocket({
   url: wsPath,
 });
 
-
 const wsEpic =
   (action$: ActionsObservable<TSocketActions>, store: MiddlewareAPI<RootState>): Observable<TActions> =>
     action$.ofType(SOCKET_CARD_SUB)

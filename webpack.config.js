@@ -18,6 +18,9 @@ if (fileSystem.existsSync(secretsPath)) {
 const options = {
   name: "Web",
   devtool: "eval-source-map",
+  devServer: {
+    historyApiFallback: true
+  },
   entry: {
     index: [
       "webpack-hot-middleware/client?reload=true",

@@ -1,10 +1,10 @@
 import React from "react";
-import Board from "./board/board";
-import ErrorModal from "./common/errorHandlers/modal/errorModal";
-import { Server } from "mock-socket";
-import { Observable } from "rxjs";
-import * as cardEpicActions from "../redux/epics/index";
+import FilterLink from "./common/navigation/filterLink";
 import { connect } from "react-redux";
+import { Route, Switch } from "react-router-dom";
+import * as cardEpicActions from "../redux/epics/index";
+import Desktop from "./Desktop";
+import Mobile from "./Mobile";
 
 type TProps = typeof dispatchToProps & { };
 type TState = { };
@@ -22,6 +22,19 @@ class Main extends React.Component<TProps, TState> {
     return {};
   }
 
+  public renderPlatformChoice = () => {
+    return (
+      <div>
+        <FilterLink filter="desktop">
+          desktop
+        </FilterLink>
+        <FilterLink filter="mobile">
+          mobile
+        </FilterLink>
+      </div>
+    );
+  }
+
   public render(): JSX.Element {
     return (
       <div
@@ -32,10 +45,17 @@ class Main extends React.Component<TProps, TState> {
           width: "100%",
         }}
       >
-        <Board />
-        <ErrorModal />
-      </div>)
-    ;
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={this.renderPlatformChoice}
+          />
+          <Route path="/desktop" component={Desktop}/>
+          <Route path="/mobile" component={Mobile}/>
+        </Switch>
+      </div>
+    );
   }
 }
 

@@ -28,15 +28,18 @@ if (isDev) {
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
-  app.get("*", (req, res) => {
+  app.get("/*", (req, res) => {
     // res.sendFile(path.join(__dirname, "dist/index.html"));
-    res.write(middleware.fileSystem.readFileSync(path.join(__dirname, "dist", "client", "index.html")));
+    res.sendFile(path.join(__dirname, "dist/index.html"));
+    // res.sendFile(path.join(__dirname, 'index.html'))
+    // res.write(middleware.fileSystem.readFileSync(path.join(__dirname, "dist", "client", "index.html")));
     res.end();
   });
 } else {
   app.use(express.static(path.join(__dirname, "dist")));
-  app.get("*", (req, res) => {
+  app.get("/*", (req, res) => {
     res.sendFile(path.join(__dirname, "dist/index.html"));
+    res.end();
   });
 }
 

@@ -39,6 +39,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "redux-observable": "^0.16.0",
     "rimraf": "^2.6.1",
@@ -55,6 +56,7 @@
   },
   "devDependencies": {
     "@types/node": "^8.0.31",
+    "@types/react-router-dom": "^4.0.8",
     "@types/redux": "^3.6.31",
     "@types/redux-logger": "^3.0.3",
     "@types/semantic-ui": "^2.2.5",

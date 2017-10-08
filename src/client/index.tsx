@@ -4,16 +4,19 @@ import ReactDom from "react-dom";
 import Store from "./redux/store";
 import Main from "./components/Main";
 import "semantic-ui-css/semantic.min.css";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const App = () => {
   return (
     <Provider store={Store}>
-      <Main />
+      <Router>
+        <Route path="/" component={Main} />
+      </Router>
     </ Provider>
   );
 };
 
-ReactDom.render (
+ReactDom.render(
   <App />,
   window.document.getElementById("react-app"),
 );
