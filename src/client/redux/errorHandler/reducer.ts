@@ -4,15 +4,10 @@ import {
   THROW_ERROR_ACTION,
   RESOLVE_ERROR,
   RESOLVE_ERROR_ACTION,
-} from "./actions";
+  TErrorAction,
+  TErrorHandlerState,
+} from "./types";
 
-export type TErrorAction
-  = THROW_ERROR_ACTION
-  | RESOLVE_ERROR_ACTION;
-
-export type TErrorHandlerState = {
-  error?: TError,
-};
 export const initialErrorState: TErrorHandlerState = {
   error: undefined,
 };

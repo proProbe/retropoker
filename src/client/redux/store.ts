@@ -2,8 +2,10 @@ import { createStore, applyMiddleware, compose, combineReducers, Reducer } from 
 import { createEpicMiddleware } from "redux-observable";
 import logger from "redux-logger";
 import { boardReducer } from "./board/reducer";
+import { TBoardAction } from "./board/types";
 import { TBoard } from "../components/board/board.types";
-import { errorHandlerReducer, TErrorHandlerState } from "./errorHandler/reducer";
+import { errorHandlerReducer } from "./errorHandler/reducer";
+import { TErrorHandlerState, TErrorAction } from "./errorHandler/types";
 import rootEpic from "./epics/index";
 
 const isDev = process.env.NODE_ENV === "development";
@@ -11,32 +13,13 @@ const isDev = process.env.NODE_ENV === "development";
 export type RootState = {
   board: TBoard,
   errorHandler: TErrorHandlerState,
-  tickers: any,
 };
 
-const tickers = (state = {}, action: any) => {
-  switch (action.type) {
-    case "ADD_TICKER":
-      return {
-        ...state,
-        [action.ticker]: null,
-      };
-
-    case "TICKER_TICK":
-      return {
-        ...state,
-        [action.ticker]: action.value,
-      };
-
-    default:
-      return state;
-  }
-};
+export type RootAction = TBoardAction | TErrorAction | {type: "NOOP"};
 
 const rootReducer: Reducer<RootState> = combineReducers({
   board: boardReducer,
   errorHandler: errorHandlerReducer,
-  tickers: tickers,
 });
 
 const epicMiddleware = createEpicMiddleware(rootEpic);

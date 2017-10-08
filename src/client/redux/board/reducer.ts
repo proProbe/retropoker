@@ -10,15 +10,9 @@ import {
   CHANGE_CARD_ACTION,
   INIT_BOARD,
   INIT_BOARD_ACTION,
-} from "./actions";
+  TBoardAction,
+} from "./types";
 import _ from "lodash";
-
-type BoardAction
-  = ADD_CARD_TO_COLUMN_ACTION
-  | CHANGE_ALL_CARD_STATUS_ACTION
-  | CHANGE_CARD_ACTION
-  | CHANGE_BOARD_STATE_ACTION
-  | INIT_BOARD_ACTION;
 
 export const initialBoardState: TBoard = {
   state: "hidden",
@@ -30,7 +24,7 @@ export const initialBoardState: TBoard = {
   ],
 };
 
-export const boardReducer = (state: TBoard = initialBoardState, action: BoardAction) => {
+export const boardReducer = (state: TBoard = initialBoardState, action: TBoardAction) => {
   switch (action.type) {
     case ADD_CARD_TO_COLUMN: {
       const newColumns = state.columns.map((c) => {

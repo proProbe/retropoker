@@ -47,14 +47,7 @@ const server = app.listen(port, "0.0.0.0", (err, res) => {
   console.log(`Listening on port ${port}`);
 });
 
-const cards = [{
-  columnId: "3",
-  card: {
-    id: "new right",
-    description: "this was here before!",
-    status: "hidden",
-  },
-}];
+const cards = [];
 
 const board = {
   state: "hidden",
@@ -102,8 +95,6 @@ const handleWSMessages = (wss, ws, msg) => {
 const wss = new WebSocket.Server({server: server});
 wss.on("connection", (ws, req) => {
   ws.send(JSON.stringify({type: "INIT_BOARD", board: board}));
-  // ws.send(JSON.stringify({msg: "GOT IT"}));
-  // console.log("connection", req);
   ws.on("message", (msg) => {
     handleWSMessages(wss, ws, JSON.parse(msg));
   });
