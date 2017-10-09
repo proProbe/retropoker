@@ -1,12 +1,12 @@
 import React from "react";
-import { SemanticCOLORS, Icon, TextArea, Form, Modal, Button } from "semantic-ui-react";
+import _ from "lodash";
 import { connect } from "react-redux";
 import { RootState } from "../redux/store";
 import { returntypeof } from "../utils/utils";
 import * as addCardEpicActions from "../redux/epics/index";
 import * as errorHandlerActions from "../redux/errorHandler/actions";
 import { TCard } from "../components/card/card.types";
-import _ from "lodash";
+import { Header, Dimmer, SemanticCOLORS, Icon, TextArea, Form, Modal, Button } from "semantic-ui-react";
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & {};
 type TState = {
@@ -149,7 +149,7 @@ class Mobile extends React.Component<TProps, TState> {
       borderRadius: 0,
     };
     const colors: SemanticCOLORS[] = ["green", "teal", "blue", "purple"];
-    const columnButtons = this.props.columns.map((col, index) => {
+    const columnButtons = this.props.columns.map((col: any, index: number) => {
       const addCardFunc = () => this.addCard(col.id);
       return (
         <Button
@@ -191,8 +191,23 @@ class Mobile extends React.Component<TProps, TState> {
           flex: 1,
         }}
       >
-        {this.renderModal()}
-        {this.renderButtons()}
+        <Dimmer.Dimmable
+          dimmed={this.props.boardState === "showing"}
+          blurring={true}
+          style={{
+            display: "flex",
+            flex: 1,
+          }}
+        >
+          <Dimmer active={this.props.boardState === "showing"}>
+              <Header as="h2" icon inverted>
+                <Icon name="tv" />
+                Currently showing on board
+              </Header>
+          </Dimmer>
+          {this.props.boardState === "showing" ? <div/> : this.renderModal()}
+          {this.renderButtons()}
+        </Dimmer.Dimmable>
       </div>
     );
   }
@@ -201,6 +216,7 @@ class Mobile extends React.Component<TProps, TState> {
 const mapStateToProps = (state: RootState) => {
   return {
     columns: state.board.columns,
+    boardState: state.board.state,
   };
 };
 const mapStateProps = returntypeof(mapStateToProps);
