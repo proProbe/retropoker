@@ -7,7 +7,7 @@ const app = express();
 if (!isDev) {
   app.use(express.static("build"));
 }
-const server = app.listen(port, (err, res) => {
+const server = app.listen(port, "0.0.0.0", (err, res) => {
   if (err) {
     return console.log(err);
   }

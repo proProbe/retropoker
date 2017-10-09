@@ -12,10 +12,10 @@ import _ from "lodash";
 export const initialBoardState: TBoard = {
   state: "hidden",
   columns: [
-    {id: "1", title: "Title 1", cards: []},
-    {id: "2", title: "Title 2", cards: []},
-    {id: "3", title: "Title 3", cards: []},
-    {id: "4", title: "Title 4", cards: []},
+    {id: "1", title: "Continue", cards: []},
+    {id: "2", title: "Stop", cards: []},
+    {id: "3", title: "Idea", cards: []},
+    {id: "4", title: "Flower", cards: []},
   ],
 };
 

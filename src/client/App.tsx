@@ -1,10 +1,11 @@
 import React from "react";
-import FilterLink from "./common/navigation/filterLink";
+import FilterLink from "./components/common/navigation/filterLink";
 import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
-import * as cardEpicActions from "../redux/epics/index";
-import Desktop from "./Desktop";
-import Mobile from "./Mobile";
+import * as cardEpicActions from "./redux/epics/index";
+import Desktop from "./components/Desktop";
+import Mobile from "./mobile/Mobile";
+import { Button } from "semantic-ui-react";
 
 type TProps = typeof dispatchToProps & { };
 type TState = { };
@@ -24,12 +25,24 @@ class Main extends React.Component<TProps, TState> {
 
   public renderPlatformChoice = () => {
     return (
-      <div>
+      <div style={{display: "flex", flexDirection: "column", flex: 1, justifyContent: "center"}}>
         <FilterLink filter="desktop">
-          desktop
+          <Button
+            size="massive"
+            color="teal"
+            style={{justifyContent: "center", flex: 1, display: "flex", margin: 0, padding: 0, borderRadius: 0}}
+          >
+              Desktop
+          </Button>
         </FilterLink>
         <FilterLink filter="mobile">
-          mobile
+          <Button
+            size="massive"
+            color="blue"
+            style={{justifyContent: "center", flex: 1, display: "flex", margin: 0, padding: 0, borderRadius: 0}}
+          >
+              Mobile
+          </Button>
         </FilterLink>
       </div>
     );
@@ -39,7 +52,6 @@ class Main extends React.Component<TProps, TState> {
     return (
       <div
         style={{
-          backgroundColor: "blue",
           display: "flex",
           height: "100%",
           width: "100%",
