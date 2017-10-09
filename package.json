@@ -2,6 +2,12 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "proxy": {
+    "/socket": {
+      "target": "ws://localhost:3001/",
+      "ws": true
+    }
+  },
   "dependencies": {
     "autoprefixer": "7.1.2",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
@@ -46,9 +52,11 @@
     "ws": "^3.2.0"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "server": "node server.js",
+    "client": "node scripts/start.js"
   },
   "devDependencies": {
     "@types/jest": "^21.1.2",

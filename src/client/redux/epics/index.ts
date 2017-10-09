@@ -50,7 +50,7 @@ export const actionCreators = {
   }),
 };
 
-const wsPath = "ws://localhost:3000";
+const wsPath = "ws://localhost:3000/socket";
 export const socket$ = Observable.webSocket({
   url: wsPath,
 });
