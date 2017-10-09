@@ -27,11 +27,17 @@ export type SOCKET_CHANGE_BOARD_STATE_ACTION = {
   type: typeof SOCKET_CHANGE_BOARD_STATE,
   boardState: TBoardState,
 };
+export const SOCKET_CHANGE_CARD = "SOCKET_CHANGE_CARD";
+export type SOCKET_CHANGE_CARD_ACTION = {
+  type: typeof SOCKET_CHANGE_CARD,
+  card: TCard,
+};
 
 type TSocketActions
   = SOCKET_ADD_CARD_ACTION
   | SOCKET_CARD_SUB_ACTION
   | SOCKET_CHANGE_BOARD_STATE_ACTION
+  | SOCKET_CHANGE_CARD_ACTION
   | SOCKET_ADD_CARD_COLUMN_ACTION;
 
 type TActions = TSocketActions | RootAction;
@@ -47,6 +53,10 @@ export const actionCreators = {
   socketChangeBoardState: (boardState: TBoardState): SOCKET_CHANGE_BOARD_STATE_ACTION => ({
     type: SOCKET_CHANGE_BOARD_STATE,
     boardState: boardState,
+  }),
+  socketChangeCard: (card: TCard): SOCKET_CHANGE_CARD_ACTION => ({
+    type: SOCKET_CHANGE_CARD,
+    card: card,
   }),
 };
 
@@ -64,6 +74,7 @@ const wsEpic =
               "ADD_CARD_TO_COLUMN",
               "INIT_BOARD",
               "CHANGE_BOARD_STATE",
+              "CHANGE_CARD",
             ].includes(serverAction.type))
           .map((serverAction: RootAction) => serverAction),
       );
@@ -73,6 +84,7 @@ const wsActionsEpic =
     action$.ofType(
       SOCKET_ADD_CARD_COLUMN,
       SOCKET_CHANGE_BOARD_STATE,
+      SOCKET_CHANGE_CARD,
     )
     .map((action: TSocketActions) => socket$.next(JSON.stringify(action)))
     .mapTo({type: "NOOP"} as RootAction);

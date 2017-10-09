@@ -56,7 +56,7 @@ class Column extends React.Component<TProps, TState> {
         );
         break;
       case "edit":
-        this.props.changeCard({
+        this.props.socketChangeCard({
           ...this.state.card,
           status: "hidden",
         });
@@ -111,7 +111,7 @@ class Column extends React.Component<TProps, TState> {
           <TextArea
             value={description}
             style={{
-              fontSize: "7vh",
+              fontSize: "4vh",
               padding: "0.25em 0.5em",
             }}
             onChange={this.handleCardChange}
@@ -190,6 +190,7 @@ const dispatchToProps = {
   changeCard: boardActions.actionCreators.changeCard,
   throwError: errorHandlerActions.actionCreators.throwError,
   socketAddCardToColumn: addCardEpicActions.actionCreators.socketAddCardToColumn,
+  socketChangeCard: addCardEpicActions.actionCreators.socketChangeCard,
 };
 
 export default connect(

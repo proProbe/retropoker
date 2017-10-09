@@ -14,7 +14,7 @@ const server = app.listen(port, "0.0.0.0", (err, res) => {
   console.log(`Listening on port ${port}`);
 });
 
-const cards = [];
+let cards = [];
 
 const board = {
   state: "hidden",
@@ -38,15 +38,35 @@ const handleWSMessages = (wss, ws, msg) => {
       break;
     }
     case "SOCKET_ADD_CARD_COLUMN": {
+      const data = {
+        columnId: msg.columnId,
+        card: msg.card
+      }
+      cards.push(data);
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          const data = {
-            columnId: msg.columnId,
-            card: msg.card
-          }
-          cards.push(data);
           client.send(JSON.stringify({
             type: "ADD_CARD_TO_COLUMN",
+            ...data
+          }));
+        }
+      });
+      break;
+    }
+    case "SOCKET_CHANGE_CARD": {
+      const data = {
+        card: msg.card
+      }
+      cards = cards.map((card) => {
+        if (card.id === data.card.id) {
+          return data.card;
+        }
+        return card;
+      })
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({
+            type: "CHANGE_CARD",
             ...data
           }));
         }
