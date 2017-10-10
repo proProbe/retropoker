@@ -70,13 +70,22 @@ const wsEpic =
     action$.ofType(SOCKET_CARD_SUB)
       .mergeMap((action: TSocketActions) =>
         socket$
+          .retry(20)
+          // .takeUntil(
+          // action$.ofType("CLOSE_TICKER_STREAM")
+          //   .filter(closeAction => closeAction.ticker === action.ticker),
+          // )
           .filter((serverAction: RootAction) => [
               "ADD_CARD_TO_COLUMN",
               "INIT_BOARD",
               "CHANGE_BOARD_STATE",
               "CHANGE_CARD",
             ].includes(serverAction.type))
-          .map((serverAction: RootAction) => serverAction),
+          .map((serverAction: RootAction) => serverAction)
+          .catch((error) => {
+            const errorAction: RootAction = {type: "THROW_ERROR", error: { message: "error", type: "error"}};
+            return Observable.of(errorAction);
+          }),
       );
 
 const wsActionsEpic =
