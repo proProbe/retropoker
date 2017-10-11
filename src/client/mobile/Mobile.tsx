@@ -25,10 +25,15 @@ class Mobile extends React.Component<TProps, TState> {
   }
 
   private addCard = (columnId: string): void => {
+    if (!this.props.user) {
+      this.props.throwError({message: "Error! you have no user", type: "error"});
+      return;
+    }
     const newCard: TCard = {
         id: _.uniqueId("card"),
         description: "",
         status: "add",
+        author: this.props.user.name,
     };
     this.setState({cardToAdd: {columnId: columnId, card: newCard}});
     return this.showModal();
@@ -159,7 +164,7 @@ class Mobile extends React.Component<TProps, TState> {
           style={buttonStyle}
           onClick={addCardFunc}
         >
-          {`Add to ${col.title}`}
+          {col.title}
         </Button>
       );
     });
@@ -217,6 +222,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     columns: state.board.columns,
     boardState: state.board.state,
+    user: state.user.user,
   };
 };
 const mapStateProps = returntypeof(mapStateToProps);

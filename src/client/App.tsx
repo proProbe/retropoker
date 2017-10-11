@@ -3,11 +3,15 @@ import FilterLink from "./components/common/navigation/filterLink";
 import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import * as cardEpicActions from "./redux/epics/index";
+import * as userActions from "./redux/user/actions";
 import Desktop from "./components/Desktop";
 import Mobile from "./mobile/Mobile";
 import { Button } from "semantic-ui-react";
+import { RootState } from "./redux/store";
+import { returntypeof } from "./utils/utils";
+import LoginModal from "./components/common/login/modal/modal";
 
-type TProps = typeof dispatchToProps & { };
+type TProps = typeof dispatchToProps & typeof mapStateProps & { };
 type TState = { };
 class Main extends React.Component<TProps, TState> {
   constructor(props: TProps) {
@@ -15,8 +19,10 @@ class Main extends React.Component<TProps, TState> {
     this.state = this.initState();
   }
 
-  public componentDidMount() {
-    this.props.socketCardSub();
+  public componentWillReceiveProps(nextProps: TProps) {
+    if (nextProps.user !== this.props.user) {
+      this.props.socketCardSub();
+    }
   }
 
   private initState(): TState {
@@ -32,7 +38,7 @@ class Main extends React.Component<TProps, TState> {
             color="teal"
             style={{justifyContent: "center", flex: 1, display: "flex", margin: 0, padding: 0, borderRadius: 0}}
           >
-              Desktop
+            Desktop
           </Button>
         </FilterLink>
         <FilterLink filter="mobile">
@@ -41,7 +47,7 @@ class Main extends React.Component<TProps, TState> {
             color="blue"
             style={{justifyContent: "center", flex: 1, display: "flex", margin: 0, padding: 0, borderRadius: 0}}
           >
-              Mobile
+            Mobile
           </Button>
         </FilterLink>
       </div>
@@ -57,6 +63,7 @@ class Main extends React.Component<TProps, TState> {
           width: "100%",
         }}
       >
+        <LoginModal showing={!this.props.user}/>
         <Switch>
           <Route
             exact
@@ -71,10 +78,18 @@ class Main extends React.Component<TProps, TState> {
   }
 }
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    user: state.user.user,
+  };
+};
+
+const mapStateProps = returntypeof(mapStateToProps);
 const dispatchToProps = {
   socketCardSub: cardEpicActions.actionCreators.socketCardSub,
+  setUser: userActions.actionCreators.setUser,
 };
 export default connect(
-  (state: any) => ({}),
+  mapStateToProps,
   dispatchToProps,
 )(Main);

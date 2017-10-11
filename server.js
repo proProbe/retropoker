@@ -1,5 +1,6 @@
 const express = require("express");
 const WebSocket = require("ws");
+const _ = require("lodash");
 
 const isDev = process.env.NODE_ENV !== "production";
 const port = isDev ? 3001 : process.env.PORT;
@@ -40,7 +41,10 @@ const handleWSMessages = (wss, ws, msg) => {
     case "SOCKET_ADD_CARD_COLUMN": {
       const data = {
         columnId: msg.columnId,
-        card: msg.card
+        card: {
+          ...msg.card,
+          id: _.uniqueId("card"),
+        }
       }
       cards.push(data);
       wss.clients.forEach((client) => {

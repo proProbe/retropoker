@@ -55,7 +55,7 @@ class Card extends React.Component<TProps, TState> {
         inverted
         color={color}
       >
-        {this.props.boardState === "hidden" ? "..." : this.props.description}
+        {this.props.boardState === "hidden" ? `${this.props.author} ...` : this.props.description}
       </Segment>
     );
   }

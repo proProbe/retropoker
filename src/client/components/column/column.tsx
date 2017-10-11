@@ -5,13 +5,14 @@ import _ from "lodash";
 import { TColumn } from "./column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
+import { returntypeof } from "../../utils/utils";
 import * as boardActions from "../../redux/board/actions";
 import * as errorHandlerActions from "../../redux/errorHandler/actions";
 import * as addCardEpicActions from "../../redux/epics/index";
 import { Button, Header, Modal, Icon, Form } from "semantic-ui-react";
 import TextArea from "../common/textarea/textArea";
 
-type TProps = TColumn & typeof dispatchToProps;
+type TProps = TColumn & typeof dispatchToProps & typeof mapStateProps;
 type TState = {
   showModal: boolean;
   card?: TCard;
@@ -30,10 +31,15 @@ class Column extends React.Component<TProps, TState> {
   }
 
   private addCard = (): void => {
+    if (!this.props.user) {
+      this.props.throwError({message: "Error! No user", type: "error"});
+      return;
+    }
     const newCard: TCard = {
         id: _.uniqueId("card"),
         description: "",
         status: "add",
+        author: this.props.user.name,
     };
     this.setState({card: newCard});
     return this.showModal(newCard);
@@ -185,6 +191,13 @@ class Column extends React.Component<TProps, TState> {
   }
 }
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    user: state.user.user,
+  };
+};
+const mapStateProps = returntypeof(mapStateToProps);
+
 const dispatchToProps = {
   addCardToColumn: boardActions.actionCreators.addCardToColumn,
   changeCard: boardActions.actionCreators.changeCard,
@@ -194,6 +207,6 @@ const dispatchToProps = {
 };
 
 export default connect(
-  (state: RootState) => ({}),
+  mapStateToProps,
   dispatchToProps,
 )(Column);

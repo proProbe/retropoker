@@ -6,6 +6,8 @@ import { TBoardAction } from "./board/types";
 import { TBoard } from "../components/board/board.types";
 import { errorHandlerReducer } from "./errorHandler/reducer";
 import { TErrorHandlerState, TErrorAction } from "./errorHandler/types";
+import { userReducer } from "./user/reducer";
+import { TUserState, TUserAction } from "./user/types";
 import rootEpic from "./epics/index";
 
 const isDev = process.env.NODE_ENV === "development";
@@ -13,13 +15,19 @@ const isDev = process.env.NODE_ENV === "development";
 export type RootState = {
   board: TBoard,
   errorHandler: TErrorHandlerState,
+  user: TUserState,
 };
 
-export type RootAction = TBoardAction | TErrorAction | {type: "NOOP"};
+export type RootAction
+  = TBoardAction
+  | TErrorAction
+  | TUserAction
+  | {type: "NOOP"};
 
 const rootReducer: Reducer<RootState> = combineReducers({
   board: boardReducer,
   errorHandler: errorHandlerReducer,
+  user: userReducer,
 });
 
 const epicMiddleware = createEpicMiddleware(rootEpic);
