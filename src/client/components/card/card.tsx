@@ -3,7 +3,7 @@ import { TCard } from "./card.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import { returntypeof } from "../../utils/utils";
-import { SemanticCOLORS, Segment } from "semantic-ui-react";
+import { Segment, Header } from "semantic-ui-react";
 
 type TProps = TCard & typeof mapStateProps & {
   onClick: (cardId: string) => void,
@@ -29,33 +29,34 @@ class Card extends React.Component<TProps, TState> {
     return this.props.onClick(this.props.id);
   }
 
-  private getCardColor = (): SemanticCOLORS => {
-    if (this.props.boardState === "hidden") {
-      return "grey";
-    }
-
-    switch (this.props.status) {
-      case "unread":
-        return "pink";
-      default:
-        return "green";
-    }
-  }
+  // private getCardColor = (): string => {
+  //   switch (this.props.status) {
+  //     case "unread":
+  //       return "pink";
+  //     default:
+  //       return "#C4C5C7";
+  //   }
+  // }
 
   private renderNote = (): JSX.Element => {
-    const color = this.getCardColor();
+    // const color = this.getCardColor();
     return (
       <Segment
         style={{
           minHeight: 30,
           display: "flex",
           alignItems: "center",
+          borderRadius: 0,
+          marginBottom: "10px",
+          marginTop: 0,
         }}
         onClick={this.onClick}
-        inverted
-        color={color}
+        disabled={this.props.boardState === "hidden"}
+        color="yellow"
       >
-        {this.props.boardState === "hidden" ? `${this.props.author} ...` : this.props.description}
+        <Header as="h4" color="black">
+          {this.props.boardState === "hidden" ? `${this.props.author} ...` : this.props.description}
+        </Header>
       </Segment>
     );
   }

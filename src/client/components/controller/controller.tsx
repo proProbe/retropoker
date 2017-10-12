@@ -5,7 +5,7 @@ import { RootState } from "../../redux/store";
 import { returntypeof } from "../../utils/utils";
 import * as boardActions from "../../redux/board/actions";
 import * as socketActions from "../../redux/epics/index";
-import { Button, Divider } from "semantic-ui-react";
+import { Segment, Button, Divider } from "semantic-ui-react";
 
 type TProps = TController & typeof dispatchToProps & typeof mapStateProps & {
 
@@ -39,30 +39,37 @@ class Controller extends React.Component<TProps, TState> {
 
   public render(): JSX.Element {
     return (
-      <div
+      <Segment
         style={{
-          backgroundColor: "green",
+          boxShadow: "rgba(0, 0, 0, 0.75) 1px 3px 20px -2px",
           display: "flex",
-          marginRight: 5,
+          flexGrow: 0,
+          flexBasis: "150px",
+          margin: "0 5px",
+          padding: 0,
           flexDirection: "column",
-          maxWidth: 100,
+          backgroundColor: "#EDEEEE",
         }}
       >
-        <Button onClick={this.changeBoardState}>
+        <Divider horizontal>Players</Divider>
+        <div style={{flex: 1, justifyContent: "center", display: "flex"}}>
+          Players
+        </div>
+        <Button
+          style={{
+            justifyContent: "center",
+            margin: 0,
+            borderRadius: 0,
+          }}
+          onClick={this.changeBoardState}
+        >
           { this.props.boardState === "hidden"
             ? "Hidden Mode"
             : "Showing Mode"
           }
         </Button>
-        <Button onClick={this.changeBoardState}>
-          Join
-        </Button>
-        <Divider horizontal>Players</Divider>
-        <div>
-          Players
-        </div>
-      </div>)
-    ;
+      </Segment>
+    );
   }
 }
 

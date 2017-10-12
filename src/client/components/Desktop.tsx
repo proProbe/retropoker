@@ -10,6 +10,7 @@ export default class Desktop extends React.PureComponent<TProps, any> {
         style={{
           display: "flex",
           flex: 1,
+          backgroundColor: "#C4C5C7",
         }}
       >
         <Board />

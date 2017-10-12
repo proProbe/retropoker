@@ -33,7 +33,6 @@ class Board extends React.Component<TProps, TState> {
         style={{
           margin: 10,
           padding: 10,
-          backgroundColor: "red",
           display: "flex",
           width: "100%",
           justifyContent: "space-between",
