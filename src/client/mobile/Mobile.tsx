@@ -51,7 +51,7 @@ class Mobile extends React.Component<TProps, TState> {
           this.state.cardToAdd.columnId,
           {
             ...this.state.cardToAdd.card,
-            status: "hidden",
+            status: "unread",
           },
         );
         break;

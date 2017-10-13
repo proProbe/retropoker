@@ -13,7 +13,7 @@ export const initialBoardState: TBoard = {
   state: "hidden",
   columns: [
     {id: "1", title: "Continue", cards: []},
-    {id: "2", title: "Stop", cards: []},
+    {id: "2", title: "Improvments", cards: []},
     {id: "3", title: "Idea", cards: []},
     {id: "4", title: "Flower", cards: []},
   ],

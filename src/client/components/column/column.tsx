@@ -57,14 +57,14 @@ class Column extends React.Component<TProps, TState> {
           this.props.id,
           {
             ...this.state.card,
-            status: "hidden",
+            status: "unread",
           },
         );
         break;
       case "edit":
         this.props.socketChangeCard({
           ...this.state.card,
-          status: "hidden",
+          status: "read",
         });
         break;
       default:
@@ -106,7 +106,10 @@ class Column extends React.Component<TProps, TState> {
   }
 
   private renderCards(): JSX.Element[] {
-    return this.props.cards.map((card) => <Card key={card.id} {...card} onClick={this.editCard}/>);
+    const sortedCards = _.sortBy(this.props.cards, (card) => {
+      return card.status;
+    }).reverse();
+    return sortedCards.map((card) => <Card key={card.id} {...card} onClick={this.editCard}/>);
   }
 
   private renderForm = (): JSX.Element => {

@@ -15,11 +15,9 @@ const server = app.listen(port, "0.0.0.0", (err, res) => {
   console.log(`Listening on port ${port}`);
 });
 
-let cards = [];
-
-const board = {
+let board = {
   state: "hidden",
-  cards: cards,
+  cards: [],
 }
 
 const handleWSMessages = (wss, ws, msg) => {
@@ -46,7 +44,7 @@ const handleWSMessages = (wss, ws, msg) => {
           id: _.uniqueId("card"),
         }
       }
-      cards.push(data);
+      board.cards = [...board.cards, data];
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
           client.send(JSON.stringify({
@@ -61,12 +59,16 @@ const handleWSMessages = (wss, ws, msg) => {
       const data = {
         card: msg.card
       }
-      cards = cards.map((card) => {
-        if (card.id === data.card.id) {
-          return data.card;
+      board.cards = board.cards.map((card) => {
+        console.log(card.card, data.card);
+        if (card.card.id === data.card.id) {
+          return {
+            ...card,
+            card: data.card
+          }
         }
         return card;
-      })
+      });
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
           client.send(JSON.stringify({

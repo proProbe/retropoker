@@ -51,10 +51,6 @@ class Controller extends React.Component<TProps, TState> {
           backgroundColor: "#EDEEEE",
         }}
       >
-        <Divider horizontal>Players</Divider>
-        <div style={{flex: 1, justifyContent: "center", display: "flex"}}>
-          Players
-        </div>
         <Button
           style={{
             justifyContent: "center",
@@ -67,6 +63,19 @@ class Controller extends React.Component<TProps, TState> {
             ? "Hidden Mode"
             : "Showing Mode"
           }
+        </Button>
+        <Divider horizontal>Players</Divider>
+        <div style={{flex: 1, justifyContent: "center", display: "flex"}}>
+          Players
+        </div>
+        <Button
+          style={{
+            justifyContent: "center",
+            margin: 0,
+            borderRadius: 0,
+          }}
+        >
+          Export
         </Button>
       </Segment>
     );

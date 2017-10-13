@@ -55,6 +55,7 @@ class LoginModal extends React.Component<TProps, TState> {
             value={name}
             style={{
               fontSize: "4vh",
+              flex: 1,
             }}
             onChange={this.handleUserChange}
           />
