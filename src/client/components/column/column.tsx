@@ -9,7 +9,7 @@ import { returntypeof } from "../../utils/utils";
 import * as boardActions from "../../redux/board/actions";
 import * as errorHandlerActions from "../../redux/errorHandler/actions";
 import * as addCardEpicActions from "../../redux/epics/index";
-import { Segment, Button, Header, Modal, Icon, Form } from "semantic-ui-react";
+import { SemanticCOLORS, Segment, Button, Header, Modal, Icon, Form } from "semantic-ui-react";
 import TextArea from "../common/textarea/textArea";
 
 type TProps = TColumn & typeof dispatchToProps & typeof mapStateProps;
@@ -135,42 +135,54 @@ class Column extends React.Component<TProps, TState> {
       <Modal
         open={this.state.showModal}
         basic
-        size="fullscreen"
+        size="large"
+        style={{
+          top: 40,
+          marginTop: 0,
+        }}
       >
+        <Modal.Header>Add Card</Modal.Header>
         <Modal.Content>
           {this.renderForm()}
           <div
             style={{
               display: "flex",
               justifyContent: "center",
+              paddingTop: 40,
             }}
           >
-          <Button.Group>
-            <Button style={{fontSize: "2rem"}} basic color="red" inverted onClick={this.closeModal}>
-              <Icon name="remove" /> Cancel
-            </Button>
-            <Button style={{fontSize: "2rem"}} color="green" inverted onClick={this.confirmModal}>
-              <Icon name="checkmark" /> Confirm
-            </Button>
-          </Button.Group>
+            <Button.Group
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Button size="massive" basic color="red" inverted onClick={this.closeModal}>
+                <Icon name="remove" /> Cancel
+              </Button>
+              <Button.Or/>
+              <Button size="massive" color="green" inverted onClick={this.confirmModal}>
+                <Icon name="checkmark" /> Confirm
+              </Button>
+            </Button.Group>
           </div>
         </Modal.Content>
       </Modal>
     );
   }
 
-  private getHeaderColor = (columnId: string): string => {
+  private getHeaderColor = (columnId: string): SemanticCOLORS => {
     switch (columnId) {
       case "1":
-        return "#00A03E";
+        return "green";
       case "2":
-        return "#00928C";
+        return "teal";
       case "3":
-        return "#0071B8";
+        return "blue";
       case "4":
-        return "#4D30AF";
+        return "purple";
       default:
-        return "white";
+        return "black";
     }
   }
 
@@ -186,29 +198,39 @@ class Column extends React.Component<TProps, TState> {
           flex: 1,
           flexDirection: "column",
           backgroundColor: "#EDEEEE",
+          border: 0,
+          maxWidth: "calc(25% - 10px)",
         }}
-        basic
       >
-        <div
+        <Segment
+          color={headerColor}
+          onClick={this.addCard}
+          inverted
           style={{
-            height: "60px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: headerColor,
             cursor: "pointer",
           }}
-          onClick={this.addCard}
         >
-          <Header inverted as="h3" color="black">{this.props.title}</Header>
-        </div>
+          <Header
+            inverted
+            as="h3"
+            color="black"
+            textAlign="center"
+            style={{
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+            }}
+          >
+            {this.props.title}
+          </Header>
+        </Segment>
         <div
           style={{
             overflowY: "auto",
             display: "flex",
             flexDirection: "column",
+            margin: "0.1rem 3px 0",
             flex: 1,
-            margin: "20px 3px 0",
           }}
         >
           {this.renderCards()}

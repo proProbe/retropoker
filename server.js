@@ -87,6 +87,9 @@ const handleWSMessages = (wss, ws, msg) => {
 
 const wss = new WebSocket.Server({server: server});
 wss.on("connection", (ws, req) => {
+  console.log(req);
+  console.log("========================================");
+  console.log(ws);
   ws.send(JSON.stringify({type: "INIT_BOARD", board: board}));
   ws.on("message", (msg) => {
     handleWSMessages(wss, ws, JSON.parse(msg));

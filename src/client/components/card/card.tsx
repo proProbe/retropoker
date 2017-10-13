@@ -52,14 +52,24 @@ class Card extends React.Component<TProps, TState> {
           alignItems: "center",
           borderRadius: 0,
           marginTop: 0,
+          minHeight: "3rem",
+          maxHeight: "3rem",
+          cursor: this.props.boardState === "showing" ? "pointer" : undefined,
         }}
-        size="large"
         onClick={this.onClick}
         disabled={this.props.boardState === "hidden"}
         color={color}
         raised
       >
-        <Header as="h4" color="black">
+        <Header
+          style={{
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+          }}
+          as="h4"
+          color="black"
+        >
           {this.props.boardState === "hidden" ? `${this.props.author} ...` : this.props.description}
         </Header>
       </Segment>

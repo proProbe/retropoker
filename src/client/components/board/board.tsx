@@ -38,8 +38,23 @@ class Board extends React.Component<TProps, TState> {
           justifyContent: "space-between",
         }}
       >
-        <Controller />
-        {this.renderColumns()}
+        <div
+          style={{
+            display: "flex",
+            flex: 1,
+            maxWidth: 150,
+          }}
+        >
+          <Controller />
+        </div>
+        <div
+          style={{
+            flex: 10,
+            display: "flex",
+          }}
+        >
+          {this.renderColumns()}
+        </div>
       </div>
     );
   }

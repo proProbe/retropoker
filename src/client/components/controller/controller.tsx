@@ -43,8 +43,7 @@ class Controller extends React.Component<TProps, TState> {
         style={{
           boxShadow: "rgba(0, 0, 0, 0.75) 1px 3px 20px -2px",
           display: "flex",
-          flexGrow: 0,
-          flexBasis: "150px",
+          flex: 1,
           margin: "0 5px",
           padding: 0,
           flexDirection: "column",
