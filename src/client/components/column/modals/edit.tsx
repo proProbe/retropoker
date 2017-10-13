@@ -82,20 +82,53 @@ class ModalEdit extends React.Component<TProps, TState> {
               paddingTop: 40,
             }}
           >
-            <Button.Group
+            <Button
+              attached="right"
+              size="massive"
+              color="grey"
+              inverted
+              style={{paddingRight: 0, borderRadius: 0}}
+            >
+              <Icon name="left chevron" />
+            </Button>
+            <Button
+              size="massive"
+              content="Edit"
+              inverted
+              color="green"
+              onClick={this.confirmModal}
+              style={{margin: 0, borderRadius: 0}}
+            >
+              <Icon name="checkmark" /> Confirm
+            </Button>
+            <Button
+              attached="left"
+              size="massive"
+              color="grey"
+              inverted
+              style={{paddingLeft: 0, borderRadius: 0}}
+            >
+              <Icon name="right chevron" />
+            </Button>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              paddingTop: 30,
+            }}
+          >
+            <Button
+              size="massive"
+              color="red"
+              inverted
+              onClick={this.closeModal}
               style={{
-                display: "flex",
-                alignItems: "center",
+                borderRadius: 0,
               }}
             >
-              <Button size="massive" basic color="red" inverted onClick={this.closeModal}>
-                <Icon name="remove" /> Cancel
-              </Button>
-              <Button.Or/>
-              <Button size="massive" color="green" inverted onClick={this.confirmModal}>
-                <Icon name="checkmark" /> Confirm
-              </Button>
-            </Button.Group>
+              <Icon name="remove" /> Cancel
+            </Button>
           </div>
         </Modal.Content>
       </Modal>
