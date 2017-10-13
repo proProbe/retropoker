@@ -6,7 +6,7 @@ import { returntypeof } from "../../utils/utils";
 import { SemanticCOLORS, Segment, Header } from "semantic-ui-react";
 
 type TProps = TCard & typeof mapStateProps & {
-  onClick: (cardId: string) => void,
+  onClick: (card: TCard) => void,
 };
 
 type TState = {
@@ -26,7 +26,7 @@ class Card extends React.Component<TProps, TState> {
     if (this.props.boardState === "hidden") {
       return;
     }
-    return this.props.onClick(this.props.id);
+    return this.props.onClick(this.props);
   }
 
   private getCardColor = (): SemanticCOLORS => {
