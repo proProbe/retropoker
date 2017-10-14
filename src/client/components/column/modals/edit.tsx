@@ -1,5 +1,6 @@
 import React from "react";
 import { TCard } from "../../card/card.types";
+import { TColumn } from "../column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { returntypeof } from "../../../utils/utils";
@@ -7,25 +8,62 @@ import { Icon, Form, Modal, Button } from "semantic-ui-react";
 import TextArea from "../../common/textarea/textArea";
 import * as addCardEpicActions from "../../../redux/epics/index";
 
+const unknownCard: TCard = {
+  id: "",
+  author: "UNKNOWN",
+  description: "SOME IS WRONG HERE",
+  status: "error",
+};
+
 type TProps = typeof dispatchToProps & typeof mapStateProps & {
-  card: TCard,
+  cardId: string,
+  columnId: string,
   onClose: () => void,
   onConfirm: () => void,
 };
 type TState = {
   cardToEdit: TCard,
+  cardsToView: TCard[],
+  currentIndex: number,
 };
 class ModalEdit extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
+
+    const maybeCard = this.getCard(props.columnId, props.cardId);
+    const card = maybeCard ? maybeCard : unknownCard;
+
+    const maybeColumn = this.getColumn(props.columnId);
+    const cardsToView = maybeColumn ? maybeColumn.cards : [];
+
     this.state = {
-      cardToEdit: props.card,
+      cardToEdit: card,
+      cardsToView: cardsToView,
+      currentIndex: 0,
     };
+  }
+
+  private getCard = (colId: string, cardId: string): TCard | undefined => {
+    const maybeColumn = this.getColumn(colId);
+    if (!maybeColumn) {
+      return ;
+    }
+    const maybeCard = maybeColumn.cards.find((card: TCard) => {
+      return card.id === cardId;
+    });
+    return maybeCard;
+  }
+
+  private getColumn = (colId: string): TColumn | undefined => {
+    return this.props.columns.find((col) => {
+      return col.id === colId;
+    });
   }
 
   private confirmModal = (): void => {
     this.props.socketEditCard({
       ...this.state.cardToEdit,
+      status: "read",
     });
     return this.props.onConfirm();
   }
@@ -41,6 +79,46 @@ class ModalEdit extends React.Component<TProps, TState> {
         ...this.state.cardToEdit,
         description: target.value,
       },
+    });
+  }
+
+  private hasNextCard = (): boolean => {
+    const nextCard = this.state.cardsToView[this.state.currentIndex + 1];
+    return !!nextCard;
+  }
+
+  private hasPreviousCard = (): boolean => {
+    const nextCard = this.state.cardsToView[this.state.currentIndex - 1];
+    return !!nextCard;
+  }
+
+  private nextCard = (): void => {
+    if (!this.hasNextCard()) {
+      return;
+    }
+    this.props.socketEditCard({
+      ...this.state.cardToEdit,
+      status: "read",
+    });
+    const nextCard = this.state.cardsToView[this.state.currentIndex + 1];
+    return this.setState({
+      currentIndex: this.state.currentIndex + 1,
+      cardToEdit: nextCard,
+    });
+  }
+
+  private previousCard = (): void => {
+    if (!this.hasPreviousCard()) {
+      return;
+    }
+    this.props.socketEditCard({
+      ...this.state.cardToEdit,
+      status: "read",
+    });
+    const nextCard = this.state.cardsToView[this.state.currentIndex - 1];
+    return this.setState({
+      currentIndex: this.state.currentIndex - 1,
+      cardToEdit: nextCard,
     });
   }
 
@@ -72,7 +150,7 @@ class ModalEdit extends React.Component<TProps, TState> {
           marginTop: 0,
         }}
       >
-        <Modal.Header>{this.props.card.author}</Modal.Header>
+        <Modal.Header>{this.state.cardToEdit.author}</Modal.Header>
         <Modal.Content>
           {this.renderForm()}
           <div
@@ -87,25 +165,26 @@ class ModalEdit extends React.Component<TProps, TState> {
               size="massive"
               color="grey"
               inverted
+              onClick={this.previousCard}
               style={{paddingRight: 0, borderRadius: 0}}
             >
               <Icon name="left chevron" />
             </Button>
             <Button
               size="massive"
-              content="Edit"
               inverted
               color="green"
               onClick={this.confirmModal}
               style={{margin: 0, borderRadius: 0}}
             >
-              <Icon name="checkmark" /> Confirm
+              <Icon name="checkmark" /> Edit
             </Button>
             <Button
               attached="left"
               size="massive"
               color="grey"
               inverted
+              onClick={this.nextCard}
               style={{paddingLeft: 0, borderRadius: 0}}
             >
               <Icon name="right chevron" />
@@ -143,6 +222,7 @@ class ModalEdit extends React.Component<TProps, TState> {
 const mapStateToProps = (state: RootState) => {
   return {
     user: state.user.user,
+    columns: state.board.columns,
   };
 };
 

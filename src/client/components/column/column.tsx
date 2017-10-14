@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "../card/card";
-import { TCard } from "../card/card.types";
 import { TColumn } from "./column.types";
+import { TCardStatus } from "../card/card.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import { returntypeof } from "../../utils/utils";
@@ -12,7 +12,7 @@ import ModalEdit from "./modals/edit";
 
 type TProps = TColumn & typeof dispatchToProps & typeof mapStateProps;
 type TState = {
-  modal: {type: "none"} | {type: "add"} | {type: "edit", card: TCard},
+  modal: {type: "none"} | {type: "add"} | {type: "edit", cardId: string},
 };
 
 class Column extends React.Component<TProps, TState> {
@@ -27,9 +27,9 @@ class Column extends React.Component<TProps, TState> {
     };
   }
 
-  private renderCards(columnType: "read" | "unread"): JSX.Element[] {
+  private renderCards(cardType: TCardStatus): JSX.Element[] {
     const filteredCards = this.props.cards.filter((card) => {
-      return card.status === columnType;
+      return card.status === cardType;
     });
     return filteredCards.map((card) => (
       <Card
@@ -40,9 +40,9 @@ class Column extends React.Component<TProps, TState> {
     ));
   }
 
-  private editCard = (card: TCard): void => {
+  private editCard = (cardId: string): void => {
     return this.setState({
-      modal: {type: "edit", card: card},
+      modal: {type: "edit", cardId: cardId},
     });
   }
 
@@ -93,13 +93,59 @@ class Column extends React.Component<TProps, TState> {
           <ModalEdit
             onClose={this.closeModal}
             onConfirm={this.closeModal}
-            card={this.state.modal.card}
+            cardId={this.state.modal.cardId}
+            columnId={this.props.id}
           />
         );
       }
       default:
         return <div />;
     }
+  }
+
+  public renderCardsContainer(): JSX.Element {
+    const upperCards = this.props.boardState === "resolving"
+      ? this.renderCards("read")
+      : this.renderCards("unread");
+
+    const lowerCards = this.props.boardState === "resolving"
+      ? this.renderCards("resolved")
+      : this.renderCards("read");
+
+    const dividerTitle = this.props.boardState === "resolving"
+      ? "Resolved"
+      : "Read";
+
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          margin: "0.1rem 0 0",
+          flex: 1,
+        }}
+      >
+        <div
+          style={{
+            height: "49%",
+            overflowY: "auto",
+            padding: "10px 0",
+          }}
+        >
+          {upperCards}
+        </div>
+        <Divider horizontal>{dividerTitle}</Divider>
+        <div
+          style={{
+            height: "49%",
+            overflowY: "auto",
+            padding: "10px 0",
+          }}
+        >
+          {lowerCards}
+        </div>
+      </div>
+    );
   }
 
   public render(): JSX.Element {
@@ -126,6 +172,7 @@ class Column extends React.Component<TProps, TState> {
             cursor: "pointer",
             borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0,
+            marginBottom: 0,
           }}
         >
           <Header
@@ -142,34 +189,7 @@ class Column extends React.Component<TProps, TState> {
             {this.props.title}
           </Header>
         </Segment>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            margin: "0.1rem 3px 0",
-            flex: 1,
-          }}
-        >
-          <div
-            style={{
-              height: "49%",
-              overflowY: "auto",
-              paddingBottom: 10,
-            }}
-          >
-            {this.renderCards("unread")}
-          </div>
-          <Divider horizontal>Read</Divider>
-          <div
-            style={{
-              height: "49%",
-              overflowY: "auto",
-              paddingBottom: 10,
-            }}
-          >
-            {this.renderCards("read")}
-          </div>
-        </div>
+        {this.renderCardsContainer()}
         {this.renderModal()}
       </Segment>
     );

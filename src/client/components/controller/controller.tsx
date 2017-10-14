@@ -5,7 +5,7 @@ import { RootState } from "../../redux/store";
 import { returntypeof } from "../../utils/utils";
 import * as boardActions from "../../redux/board/actions";
 import * as socketActions from "../../redux/epics/index";
-import { Segment, Button, Divider } from "semantic-ui-react";
+import { Form, Radio, Segment, Button, Divider } from "semantic-ui-react";
 
 type TProps = TController & typeof dispatchToProps & typeof mapStateProps & {
 
@@ -23,16 +23,22 @@ class Controller extends React.Component<TProps, TState> {
     return {};
   }
 
-  private changeBoardState = (): void => {
-    switch (this.props.boardState) {
+  private changeBoardState = (e: any, { value }: any): void => {
+    switch (value) {
       case "showing": {
+        this.props.socketChangeBoardState("showing");
+        return;
+      }
+      case "hidden": {
         this.props.socketChangeBoardState("hidden");
-        // this.props.changeBoardState("hidden");
+        return;
+      }
+      case "resolving": {
+        this.props.socketChangeBoardState("resolving");
         return;
       }
       default:
-        this.props.socketChangeBoardState("showing");
-        // this.props.changeBoardState("showing");
+        this.props.socketChangeBoardState("hidden");
         return;
     }
   }
@@ -50,19 +56,35 @@ class Controller extends React.Component<TProps, TState> {
           backgroundColor: "#EDEEEE",
         }}
       >
-        <Button
-          style={{
-            justifyContent: "center",
-            margin: 0,
-            borderRadius: 0,
-          }}
-          onClick={this.changeBoardState}
-        >
-          { this.props.boardState === "hidden"
-            ? "Hidden Mode"
-            : "Showing Mode"
-          }
-        </Button>
+        <Form style={{padding: 10}}>
+          <Form.Field>
+            <Radio
+              label="Hidden"
+              name="radioGroup"
+              value="hidden"
+              checked={this.props.boardState === "hidden"}
+              onChange={this.changeBoardState}
+            />
+          </Form.Field>
+          <Form.Field>
+            <Radio
+              label="Showing"
+              name="radioGroup"
+              value="showing"
+              checked={this.props.boardState === "showing"}
+              onChange={this.changeBoardState}
+            />
+          </Form.Field>
+          <Form.Field>
+            <Radio
+              label="Resolving"
+              name="radioGroup"
+              value="resolving"
+              checked={this.props.boardState === "resolving"}
+              onChange={this.changeBoardState}
+            />
+          </Form.Field>
+        </Form>
         <Divider horizontal>Players</Divider>
         <div style={{flex: 1, justifyContent: "center", display: "flex"}}>
           Players
