@@ -43,6 +43,10 @@ class Controller extends React.Component<TProps, TState> {
     }
   }
 
+  private exportToPDF = (): void => {
+    return;
+  }
+
   public render(): JSX.Element {
     return (
       <Segment
@@ -96,6 +100,7 @@ class Controller extends React.Component<TProps, TState> {
             margin: 0,
             borderRadius: 0,
           }}
+          onClick={this.exportToPDF}
         >
           Export
         </Button>
