@@ -1,4 +1,4 @@
-export type TCardStatus = "unread" | "showing" | "read" | "edit" | "add" | "resolved" | "error";
+export type TCardStatus = "unread" | "read" | "edit" | "resolved" | "error";
 export type TCard = {
   id: string,
   author: string,

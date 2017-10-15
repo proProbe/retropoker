@@ -31,11 +31,11 @@ class Board extends React.Component<TProps, TState> {
     return (
       <div
         style={{
-          margin: 10,
-          padding: 10,
+          padding: 20,
           display: "flex",
-          width: "100%",
+          flex: 1,
           justifyContent: "space-between",
+          maxWidth: "100vw",
         }}
       >
         <div
@@ -51,6 +51,7 @@ class Board extends React.Component<TProps, TState> {
           style={{
             flex: 10,
             display: "flex",
+            maxWidth: "calc(100% - 150px)",
           }}
         >
           {this.renderColumns()}

@@ -36,6 +36,7 @@ class ModalEdit extends React.Component<TProps, TState> {
     const maybeColumn = this.getColumn(props.columnId);
     const cardsToView = maybeColumn ? maybeColumn.cards : [];
 
+    props.socketMobileShowCard(card);
     this.state = {
       cardToEdit: card,
       cardsToView: cardsToView,
@@ -101,6 +102,7 @@ class ModalEdit extends React.Component<TProps, TState> {
       status: "read",
     });
     const nextCard = this.state.cardsToView[this.state.currentIndex + 1];
+    this.props.socketMobileShowCard(nextCard);
     return this.setState({
       currentIndex: this.state.currentIndex + 1,
       cardToEdit: nextCard,
@@ -116,6 +118,7 @@ class ModalEdit extends React.Component<TProps, TState> {
       status: "read",
     });
     const nextCard = this.state.cardsToView[this.state.currentIndex - 1];
+    this.props.socketMobileShowCard(nextCard);
     return this.setState({
       currentIndex: this.state.currentIndex - 1,
       cardToEdit: nextCard,
@@ -229,6 +232,7 @@ const mapStateToProps = (state: RootState) => {
 const mapStateProps = returntypeof(mapStateToProps);
 const dispatchToProps = {
   socketEditCard: addCardEpicActions.actionCreators.socketChangeCard,
+  socketMobileShowCard: addCardEpicActions.actionCreators.socketMobileShowCard,
 };
 
 export default connect(

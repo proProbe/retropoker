@@ -79,6 +79,20 @@ const handleWSMessages = (wss, ws, msg) => {
       });
       break;
     }
+    case "SOCKET_MOBILE_SHOW_CARD": {
+      const data = {
+        card: msg.card
+      }
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({
+            type: "MOBILE_SHOW_CARD",
+            ...data
+          }));
+        }
+      });
+      break;
+    }
     default:
       console.log("Something else called", msg.type);
       break;

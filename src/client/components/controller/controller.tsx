@@ -56,6 +56,7 @@ class Controller extends React.Component<TProps, TState> {
           backgroundColor: "#EDEEEE",
         }}
       >
+        <Divider horizontal>Board</Divider>
         <Form style={{padding: 10}}>
           <Form.Field>
             <Radio

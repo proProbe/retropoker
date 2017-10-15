@@ -5,6 +5,7 @@ import { RootState } from "../redux/store";
 import { returntypeof } from "../utils/utils";
 import * as addCardEpicActions from "../redux/epics/index";
 import * as errorHandlerActions from "../redux/errorHandler/actions";
+import * as mobileActions from "../redux/mobile/actions";
 import { TCard } from "../components/card/card.types";
 import { Header, Dimmer, SemanticCOLORS, Icon, TextArea, Form, Modal, Button } from "semantic-ui-react";
 
@@ -32,7 +33,7 @@ class Mobile extends React.Component<TProps, TState> {
     const newCard: TCard = {
         id: _.uniqueId("card"),
         description: "",
-        status: "add",
+        status: "unread",
         author: this.props.user.name,
     };
     this.setState({cardToAdd: {columnId: columnId, card: newCard}});
@@ -45,13 +46,12 @@ class Mobile extends React.Component<TProps, TState> {
       return;
     }
     switch (this.state.cardToAdd.card.status) {
-      case "add":
+      case "unread":
         this.props.socketAddCardToColumn(
         // this.props.addCardToColumn(
           this.state.cardToAdd.columnId,
           {
             ...this.state.cardToAdd.card,
-            status: "unread",
           },
         );
         break;
@@ -144,13 +144,29 @@ class Mobile extends React.Component<TProps, TState> {
       </Modal>
     );
   }
+
+  private renderShowingCardModal = (card: TCard): JSX.Element => {
+    return (
+      <Modal
+        open={true}
+        size="fullscreen"
+      >
+        <Modal.Header>{card.author}</Modal.Header>
+        <Modal.Content>
+          <Modal.Description>
+            <p style={{overflowWrap: "break-word", fontSize: "1.5rem"}}>{card.description}</p>
+          </Modal.Description>
+        </Modal.Content>
+      </Modal>
+    );
+  }
+
   public renderButtons = () => {
     const buttonStyle = {
       justifyContent: "center",
       flex: 1,
       display: "flex",
       margin: 0,
-      padding: 0,
       borderRadius: 0,
     };
     const colors: SemanticCOLORS[] = ["green", "teal", "blue", "purple"];
@@ -197,22 +213,23 @@ class Mobile extends React.Component<TProps, TState> {
         }}
       >
         <Dimmer.Dimmable
-          dimmed={this.props.boardState === "showing"}
+          dimmed={this.props.boardState !== "hidden"}
           blurring={true}
           style={{
             display: "flex",
             flex: 1,
           }}
         >
-          <Dimmer active={this.props.boardState === "showing"}>
-              <Header as="h2" icon inverted>
-                <Icon name="tv" />
-                Currently showing on board
-              </Header>
+          <Dimmer active={this.props.boardState !== "hidden"}>
+            <Header as="h2" icon inverted>
+              <Icon name="tv" />
+              Currently showing on board
+            </Header>
           </Dimmer>
-          {this.props.boardState === "showing" ? <div/> : this.renderModal()}
+          {this.props.boardState !== "hidden" ? <div/> : this.renderModal()}
           {this.renderButtons()}
         </Dimmer.Dimmable>
+        {!!this.props.cardToShow ? this.renderShowingCardModal(this.props.cardToShow) : <div/>}
       </div>
     );
   }
@@ -223,6 +240,7 @@ const mapStateToProps = (state: RootState) => {
     columns: state.board.columns,
     boardState: state.board.state,
     user: state.user.user,
+    cardToShow: state.mobile.card,
   };
 };
 const mapStateProps = returntypeof(mapStateToProps);
@@ -232,6 +250,7 @@ const dispatchToProps = {
   // changeCard: boardActions.actionCreators.changeCard,
   throwError: errorHandlerActions.actionCreators.throwError,
   socketAddCardToColumn: addCardEpicActions.actionCreators.socketAddCardToColumn,
+  mobileSetCurrentCard: mobileActions.actionCreators.mobileShowCard,
 };
 
 export default connect(

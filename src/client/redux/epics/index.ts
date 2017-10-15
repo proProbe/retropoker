@@ -32,13 +32,19 @@ export type SOCKET_CHANGE_CARD_ACTION = {
   type: typeof SOCKET_CHANGE_CARD,
   card: TCard,
 };
+export const SOCKET_MOBILE_SHOW_CARD = "SOCKET_MOBILE_SHOW_CARD";
+export type SOCKET_MOBILE_SHOW_CARD_ACTION = {
+  type: typeof SOCKET_MOBILE_SHOW_CARD,
+  card: TCard,
+};
 
 type TSocketActions
   = SOCKET_ADD_CARD_ACTION
   | SOCKET_CARD_SUB_ACTION
   | SOCKET_CHANGE_BOARD_STATE_ACTION
   | SOCKET_CHANGE_CARD_ACTION
-  | SOCKET_ADD_CARD_COLUMN_ACTION;
+  | SOCKET_ADD_CARD_COLUMN_ACTION
+  | SOCKET_MOBILE_SHOW_CARD_ACTION;
 
 type TActions = TSocketActions | RootAction;
 
@@ -56,6 +62,10 @@ export const actionCreators = {
   }),
   socketChangeCard: (card: TCard): SOCKET_CHANGE_CARD_ACTION => ({
     type: SOCKET_CHANGE_CARD,
+    card: card,
+  }),
+  socketMobileShowCard: (card: TCard): SOCKET_MOBILE_SHOW_CARD_ACTION => ({
+    type: SOCKET_MOBILE_SHOW_CARD,
     card: card,
   }),
 };
@@ -80,6 +90,7 @@ const wsEpic =
               "INIT_BOARD",
               "CHANGE_BOARD_STATE",
               "CHANGE_CARD",
+              "MOBILE_SHOW_CARD",
             ].includes(serverAction.type))
           .map((serverAction: RootAction) => serverAction)
           .catch((error) => {
@@ -94,6 +105,7 @@ const wsActionsEpic =
       SOCKET_ADD_CARD_COLUMN,
       SOCKET_CHANGE_BOARD_STATE,
       SOCKET_CHANGE_CARD,
+      SOCKET_MOBILE_SHOW_CARD,
     )
     .map((action: TSocketActions) => socket$.next(JSON.stringify(action)))
     .mapTo({type: "NOOP"} as RootAction);

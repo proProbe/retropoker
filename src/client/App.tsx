@@ -31,7 +31,16 @@ class Main extends React.Component<TProps, TState> {
 
   public renderPlatformChoice = () => {
     return (
-      <div style={{display: "flex", flexDirection: "column", flex: 1, justifyContent: "center"}}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          height: "100%",
+          width: "100%",
+          justifyContent: "center",
+        }}
+      >
         <FilterLink filter="desktop">
           <Button
             size="massive"
@@ -59,6 +68,7 @@ class Main extends React.Component<TProps, TState> {
       <div
         style={{
           display: "flex",
+          flex: "1",
           height: "100%",
           width: "100%",
         }}
