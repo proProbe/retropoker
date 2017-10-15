@@ -8,6 +8,15 @@
       "ws": true
     }
   },
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "dev-start": "concurrently \"npm run dev-server\" \"npm run client\"",
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js --env=jsdom",
+    "server": "node server.js",
+    "dev-server": "./node_modules/.bin/nodemon server.js",
+    "client": "node scripts/start.js"
+  },
   "dependencies": {
     "autoprefixer": "7.1.2",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
@@ -51,13 +60,6 @@
     "semantic-ui-react": "^0.73.0",
     "ws": "^3.2.0"
   },
-  "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom",
-    "server": "node server.js",
-    "client": "node scripts/start.js"
-  },
   "devDependencies": {
     "@types/jest": "^21.1.2",
     "@types/lodash": "^4.14.74",
@@ -70,6 +72,7 @@
     "@types/redux-logger": "^3.0.3",
     "@types/semantic-ui": "^2.2.5",
     "concurrently": "^3.5.0",
+    "nodemon": "^1.12.1",
     "redux-logger": "^3.0.6"
   },
   "jest": {
