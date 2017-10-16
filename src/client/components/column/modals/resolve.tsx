@@ -82,14 +82,16 @@ class ModalResolve extends React.Component<TProps, TState> {
 
   private handleCardChange = (event: React.SyntheticEvent<any>): void => {
     const target = event.target as HTMLInputElement;
-    return this.setState({
-      cardToResolve: {
-        ...this.state.cardToResolve,
-        status: {
-          ...this.state.cardToResolve.status,
-          message: target.value,
-        },
+    const newCard = {
+      ...this.state.cardToResolve,
+      status: {
+        ...this.state.cardToResolve.status,
+        message: target.value,
       },
+    };
+    this.props.socketLiveChangeCard(newCard);
+    return this.setState({
+      cardToResolve: newCard,
     });
   }
 
@@ -255,6 +257,7 @@ const mapStateProps = returntypeof(mapStateToProps);
 const dispatchToProps = {
   socketEditCard: addCardEpicActions.actionCreators.socketChangeCard,
   socketMobileShowCard: addCardEpicActions.actionCreators.socketMobileShowCard,
+  socketLiveChangeCard: addCardEpicActions.actionCreators.socketLiveChangeCard,
 };
 
 export default connect(

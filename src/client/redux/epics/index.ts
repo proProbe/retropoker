@@ -32,6 +32,11 @@ export type SOCKET_CHANGE_CARD_ACTION = {
   type: typeof SOCKET_CHANGE_CARD,
   card: TCard,
 };
+export const SOCKET_LIVE_CHANGE_CARD = "SOCKET_LIVE_CHANGE_CARD";
+export type SOCKET_LIVE_CHANGE_CARD_ACTION = {
+  type: typeof SOCKET_LIVE_CHANGE_CARD,
+  card: TCard,
+};
 export const SOCKET_MOBILE_SHOW_CARD = "SOCKET_MOBILE_SHOW_CARD";
 export type SOCKET_MOBILE_SHOW_CARD_ACTION = {
   type: typeof SOCKET_MOBILE_SHOW_CARD,
@@ -43,6 +48,7 @@ type TSocketActions
   | SOCKET_CARD_SUB_ACTION
   | SOCKET_CHANGE_BOARD_STATE_ACTION
   | SOCKET_CHANGE_CARD_ACTION
+  | SOCKET_LIVE_CHANGE_CARD_ACTION
   | SOCKET_ADD_CARD_COLUMN_ACTION
   | SOCKET_MOBILE_SHOW_CARD_ACTION;
 
@@ -66,6 +72,10 @@ export const actionCreators = {
   }),
   socketMobileShowCard: (card: TCard): SOCKET_MOBILE_SHOW_CARD_ACTION => ({
     type: SOCKET_MOBILE_SHOW_CARD,
+    card: card,
+  }),
+  socketLiveChangeCard: (card: TCard): SOCKET_LIVE_CHANGE_CARD_ACTION => ({
+    type: SOCKET_LIVE_CHANGE_CARD,
     card: card,
   }),
 };
@@ -110,8 +120,18 @@ const wsActionsEpic =
     .map((action: TSocketActions) => socket$.next(JSON.stringify(action)))
     .mapTo({type: "NOOP"} as RootAction);
 
+const wsLiveEpic =
+  (action$: ActionsObservable<TSocketActions>, store: MiddlewareAPI<RootState>): Observable<TActions> =>
+    action$.ofType(
+      SOCKET_LIVE_CHANGE_CARD,
+    )
+    .debounceTime(1000)
+    .map((action: TSocketActions) => socket$.next(JSON.stringify(action)))
+    .mapTo({type: "NOOP"} as RootAction);
+
 const rootEpic = combineEpics(
   wsEpic,
   wsActionsEpic,
+  wsLiveEpic,
 );
 export default rootEpic;

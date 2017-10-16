@@ -7,7 +7,7 @@ import * as addCardEpicActions from "../redux/epics/index";
 import * as errorHandlerActions from "../redux/errorHandler/actions";
 import * as mobileActions from "../redux/mobile/actions";
 import { TCard } from "../components/card/card.types";
-import { Header, Dimmer, SemanticCOLORS, Icon, TextArea, Form, Modal, Button } from "semantic-ui-react";
+import { Divider, Header, Dimmer, SemanticCOLORS, Icon, TextArea, Form, Modal, Button } from "semantic-ui-react";
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & {};
 type TState = {
@@ -145,6 +145,7 @@ class Mobile extends React.Component<TProps, TState> {
   }
 
   private renderShowingCardModal = (card: TCard): JSX.Element => {
+    const formattedDescription = _.replace(card.description, "\n", "<br>");
     return (
       <Modal
         open={true}
@@ -153,7 +154,16 @@ class Mobile extends React.Component<TProps, TState> {
         <Modal.Header>{card.author}</Modal.Header>
         <Modal.Content>
           <Modal.Description>
-            <p style={{overflowWrap: "break-word", fontSize: "1.5rem"}}>{card.description}</p>
+            {card.status.type !== "resolved"
+              ? <p style={{overflowWrap: "break-word", fontSize: "1.5rem"}}>{formattedDescription}</p>
+              : <div>
+                  <p style={{overflowWrap: "break-word", fontSize: "1.5rem"}}>{formattedDescription}</p>
+                  <Divider horizontal>Resolved with</Divider>
+                  <div style={{overflowWrap: "break-word", fontSize: "1.5rem"}}>{
+                    _.replace(card.status.message, "\n", "\<br\>")
+                  }</div>
+              </div>
+            }
           </Modal.Description>
         </Modal.Content>
       </Modal>
