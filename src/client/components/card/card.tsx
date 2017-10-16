@@ -33,7 +33,7 @@ class Card extends React.Component<TProps, TState> {
     if (this.props.boardState === "hidden") {
       return "grey";
     }
-    switch (this.props.status) {
+    switch (this.props.status.type) {
       case "unread":
         return "yellow";
       case "read":

@@ -41,7 +41,7 @@ export const boardReducer = (state: TBoard = initialBoardState, action: TBoardAc
         const newCards = c.cards.map((card) => {
           return {
             ...card,
-            status: action.status,
+            status: {...action.status},
           };
         });
         return {

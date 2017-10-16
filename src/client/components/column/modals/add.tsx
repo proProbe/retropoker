@@ -24,7 +24,7 @@ class ModalAdd extends React.Component<TProps, TState> {
       card: {
         id: _.uniqueId("card"),
         description: "",
-        status: "unread",
+        status: {type: "unread"},
         author: "UNKNOWN",
       },
     };

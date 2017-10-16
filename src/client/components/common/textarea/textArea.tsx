@@ -31,7 +31,7 @@ export default class MyTextArea extends React.Component<TProps, TState> {
     return (
       <TextArea
         ref={(input) => { this.modalInputRef = input; }}
-        rows={6}
+        rows={5}
         style={this.props.style}
         autoHeight={true}
         placeholder="..."

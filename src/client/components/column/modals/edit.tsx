@@ -12,7 +12,7 @@ const unknownCard: TCard = {
   id: "",
   author: "UNKNOWN",
   description: "SOME IS WRONG HERE",
-  status: "error",
+  status: {type: "error", error: new Error("Unkown card in edit modal")},
 };
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & {
@@ -25,6 +25,7 @@ type TState = {
   cardToEdit: TCard,
   cardsToView: TCard[],
   currentIndex: number,
+  hasEdited: boolean,
 };
 class ModalEdit extends React.Component<TProps, TState> {
   constructor(props: TProps) {
@@ -41,6 +42,7 @@ class ModalEdit extends React.Component<TProps, TState> {
       cardToEdit: card,
       cardsToView: cardsToView,
       currentIndex: 0,
+      hasEdited: false,
     };
   }
 
@@ -64,7 +66,7 @@ class ModalEdit extends React.Component<TProps, TState> {
   private confirmModal = (): void => {
     this.props.socketEditCard({
       ...this.state.cardToEdit,
-      status: "read",
+      status: {type: "read"},
     });
     return this.props.onConfirm();
   }
@@ -76,6 +78,7 @@ class ModalEdit extends React.Component<TProps, TState> {
   private handleCardChange = (event: React.SyntheticEvent<any>): void => {
     const target = event.target as HTMLInputElement;
     return this.setState({
+      hasEdited: true,
       cardToEdit: {
         ...this.state.cardToEdit,
         description: target.value,
@@ -99,7 +102,7 @@ class ModalEdit extends React.Component<TProps, TState> {
     }
     this.props.socketEditCard({
       ...this.state.cardToEdit,
-      status: "read",
+      status: {type: "read"},
     });
     const nextCard = this.state.cardsToView[this.state.currentIndex + 1];
     this.props.socketMobileShowCard(nextCard);
@@ -115,7 +118,7 @@ class ModalEdit extends React.Component<TProps, TState> {
     }
     this.props.socketEditCard({
       ...this.state.cardToEdit,
-      status: "read",
+      status: {type: "read"},
     });
     const nextCard = this.state.cardsToView[this.state.currentIndex - 1];
     this.props.socketMobileShowCard(nextCard);
@@ -166,7 +169,7 @@ class ModalEdit extends React.Component<TProps, TState> {
             <Button
               attached="right"
               size="massive"
-              color="grey"
+              color="green"
               inverted
               onClick={this.previousCard}
               style={{paddingRight: 0, borderRadius: 0}}
@@ -180,12 +183,12 @@ class ModalEdit extends React.Component<TProps, TState> {
               onClick={this.confirmModal}
               style={{margin: 0, borderRadius: 0}}
             >
-              <Icon name="checkmark" /> Edit
+              <Icon name="checkmark" /> {this.state.hasEdited ? "Edit" : "Read"}
             </Button>
             <Button
               attached="left"
               size="massive"
-              color="grey"
+              color="green"
               inverted
               onClick={this.nextCard}
               style={{paddingLeft: 0, borderRadius: 0}}

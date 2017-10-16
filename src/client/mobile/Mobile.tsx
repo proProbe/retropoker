@@ -33,7 +33,7 @@ class Mobile extends React.Component<TProps, TState> {
     const newCard: TCard = {
         id: _.uniqueId("card"),
         description: "",
-        status: "unread",
+        status: {type: "unread"},
         author: this.props.user.name,
     };
     this.setState({cardToAdd: {columnId: columnId, card: newCard}});
@@ -45,10 +45,9 @@ class Mobile extends React.Component<TProps, TState> {
       this.props.throwError({ message: "Could not confirm with no card", type: "warning" });
       return;
     }
-    switch (this.state.cardToAdd.card.status) {
+    switch (this.state.cardToAdd.card.status.type) {
       case "unread":
         this.props.socketAddCardToColumn(
-        // this.props.addCardToColumn(
           this.state.cardToAdd.columnId,
           {
             ...this.state.cardToAdd.card,

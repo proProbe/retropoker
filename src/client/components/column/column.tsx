@@ -1,7 +1,6 @@
 import React from "react";
 import Card from "../card/card";
 import { TColumn } from "./column.types";
-import { TCardStatus } from "../card/card.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
 import { returntypeof } from "../../utils/utils";
@@ -9,10 +8,14 @@ import { Divider, SemanticCOLORS, Segment, Header } from "semantic-ui-react";
 import * as errorHandlerActions from "../../redux/errorHandler/actions";
 import ModalAdd from "./modals/add";
 import ModalEdit from "./modals/edit";
+import ModalResolve from "./modals/resolve";
 
 type TProps = TColumn & typeof dispatchToProps & typeof mapStateProps;
 type TState = {
-  modal: {type: "none"} | {type: "add"} | {type: "edit", cardId: string},
+  modal: {type: "none"}
+    | {type: "add"}
+    | {type: "edit", cardId: string}
+    | {type: "resolve", cardId: string},
 };
 
 class Column extends React.Component<TProps, TState> {
@@ -27,15 +30,15 @@ class Column extends React.Component<TProps, TState> {
     };
   }
 
-  private renderCards(cardType: TCardStatus): JSX.Element[] {
+  private renderCards(cardType: "unread" | "read" | "resolved" ): JSX.Element[] {
     const filteredCards = this.props.cards.filter((card) => {
-      return card.status === cardType;
+      return card.status.type === cardType;
     });
     return filteredCards.map((card) => (
       <Card
         key={card.id}
         {...card}
-        onClick={this.editCard}
+        onClick={this.props.boardState === "showing" ? this.editCard : this.resolveCard}
       />
     ));
   }
@@ -43,6 +46,12 @@ class Column extends React.Component<TProps, TState> {
   private editCard = (cardId: string): void => {
     return this.setState({
       modal: {type: "edit", cardId: cardId},
+    });
+  }
+
+  private resolveCard = (cardId: string): void => {
+    return this.setState({
+      modal: {type: "resolve", cardId: cardId},
     });
   }
 
@@ -91,6 +100,16 @@ class Column extends React.Component<TProps, TState> {
       case "edit": {
         return (
           <ModalEdit
+            onClose={this.closeModal}
+            onConfirm={this.closeModal}
+            cardId={this.state.modal.cardId}
+            columnId={this.props.id}
+          />
+        );
+      }
+      case "resolve": {
+        return (
+          <ModalResolve
             onClose={this.closeModal}
             onConfirm={this.closeModal}
             cardId={this.state.modal.cardId}
