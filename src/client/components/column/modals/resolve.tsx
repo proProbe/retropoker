@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 import { TCard, TCardStatus } from "../../card/card.types";
 import { TColumn } from "../column.types";
 import { connect } from "react-redux";
@@ -173,7 +174,19 @@ class ModalResolve extends React.Component<TProps, TState> {
         <Modal.Content>
           <Segment>
             <Header as="h1" style={{overflowWrap: "break-word"}}>
-              {this.state.cardToResolve.description}
+              {
+                this.state.cardToResolve.description.split("\n").map((text) => {
+                  return (
+                    <p
+                      key={_.uniqueId()}
+                      style={{ overflowWrap: "break-word", fontSize: "1.5rem" }}
+                    >
+                      {text}
+                      <br />
+                    </p>
+                  );
+                })
+              }
             </Header>
           </Segment>
           <Divider horizontal inverted/>
@@ -204,7 +217,7 @@ class ModalResolve extends React.Component<TProps, TState> {
               onClick={this.confirmModal}
               style={{margin: 0, borderRadius: 0}}
             >
-              <Icon name="checkmark" /> Resolve
+              Resolve
             </Button>
             <Button
               attached="left"

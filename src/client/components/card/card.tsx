@@ -2,7 +2,7 @@ import React from "react";
 import { TCard } from "./card.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
-import { returntypeof } from "../../utils/utils";
+import { returntypeof, getCardColor } from "../../utils/utils";
 import { SemanticCOLORS, Segment, Header } from "semantic-ui-react";
 
 type TProps = TCard & typeof mapStateProps & {
@@ -33,16 +33,7 @@ class Card extends React.Component<TProps, TState> {
     if (this.props.boardState === "hidden") {
       return "grey";
     }
-    switch (this.props.status.type) {
-      case "unread":
-        return "yellow";
-      case "read":
-        return "green";
-      case "error":
-        return "red";
-      default:
-        return "purple";
-    }
+    return getCardColor(this.props.status);
   }
 
   private renderNote = (): JSX.Element => {
@@ -74,7 +65,7 @@ class Card extends React.Component<TProps, TState> {
           as="h4"
           color="black"
         >
-          {this.props.boardState === "hidden" ? `${this.props.author} ...` : this.props.description}
+          {this.props.author}: {this.props.boardState === "hidden" ? "..." : this.props.description}
         </Header>
       </Segment>
     );

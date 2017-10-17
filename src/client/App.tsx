@@ -6,6 +6,7 @@ import * as cardEpicActions from "./redux/epics/index";
 import * as userActions from "./redux/user/actions";
 import Desktop from "./components/Desktop";
 import Mobile from "./mobile/Mobile";
+import ExportView from "./export/Export";
 import { Button } from "semantic-ui-react";
 import { RootState } from "./redux/store";
 import { returntypeof } from "./utils/utils";
@@ -45,7 +46,8 @@ class Main extends React.Component<TProps, TState> {
           <Button
             size="massive"
             color="teal"
-            style={{justifyContent: "center", flex: 1, display: "flex", margin: 0, padding: 0, borderRadius: 0}}
+            fluid
+            style={{margin: 0, padding: 0, borderRadius: 0}}
           >
             Desktop
           </Button>
@@ -54,7 +56,8 @@ class Main extends React.Component<TProps, TState> {
           <Button
             size="massive"
             color="blue"
-            style={{justifyContent: "center", flex: 1, display: "flex", margin: 0, padding: 0, borderRadius: 0}}
+            fluid
+            style={{margin: 0, padding: 0, borderRadius: 0}}
           >
             Mobile
           </Button>
@@ -82,6 +85,7 @@ class Main extends React.Component<TProps, TState> {
           />
           <Route path="/desktop" component={Desktop}/>
           <Route path="/mobile" component={Mobile}/>
+          <Route path="/export" component={ExportView}/>
         </Switch>
       </div>
     );

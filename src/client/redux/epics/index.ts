@@ -125,7 +125,7 @@ const wsLiveEpic =
     action$.ofType(
       SOCKET_LIVE_CHANGE_CARD,
     )
-    .debounceTime(1000)
+    .debounceTime(250)
     .map((action: TSocketActions) => socket$.next(JSON.stringify(action)))
     .mapTo({type: "NOOP"} as RootAction);
 

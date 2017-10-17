@@ -6,6 +6,7 @@ import { returntypeof } from "../../utils/utils";
 import * as boardActions from "../../redux/board/actions";
 import * as socketActions from "../../redux/epics/index";
 import { Form, Radio, Segment, Button, Divider } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 type TProps = TController & typeof dispatchToProps & typeof mapStateProps & {
 
@@ -94,16 +95,19 @@ class Controller extends React.Component<TProps, TState> {
         <div style={{flex: 1, justifyContent: "center", display: "flex"}}>
           Players
         </div>
-        <Button
-          style={{
-            justifyContent: "center",
-            margin: 0,
-            borderRadius: 0,
-          }}
-          onClick={this.exportToPDF}
-        >
-          Export
-        </Button>
+        <Link to="/export">
+          <Button
+            fluid
+            style={{
+              justifyContent: "center",
+              margin: 0,
+              borderRadius: 0,
+            }}
+            onClick={this.exportToPDF}
+          >
+            Export
+          </Button>
+        </Link>
       </Segment>
     );
   }

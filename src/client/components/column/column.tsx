@@ -3,8 +3,8 @@ import Card from "../card/card";
 import { TColumn } from "./column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
-import { returntypeof } from "../../utils/utils";
-import { Divider, SemanticCOLORS, Segment, Header } from "semantic-ui-react";
+import { returntypeof, getColumnColor } from "../../utils/utils";
+import { Divider, Segment, Header } from "semantic-ui-react";
 import * as errorHandlerActions from "../../redux/errorHandler/actions";
 import ModalAdd from "./modals/add";
 import ModalEdit from "./modals/edit";
@@ -65,21 +65,6 @@ class Column extends React.Component<TProps, TState> {
     return this.setState({
       modal: {type: "add"},
     });
-  }
-
-  private getHeaderColor = (columnId: string): SemanticCOLORS => {
-    switch (columnId) {
-      case "1":
-        return "green";
-      case "2":
-        return "teal";
-      case "3":
-        return "blue";
-      case "4":
-        return "purple";
-      default:
-        return "black";
-    }
   }
 
   private renderModal = (): JSX.Element => {
@@ -168,7 +153,7 @@ class Column extends React.Component<TProps, TState> {
   }
 
   public render(): JSX.Element {
-    const headerColor = this.getHeaderColor(this.props.id);
+    const headerColor = getColumnColor(this.props.id);
     return (
       <Segment
         style={{

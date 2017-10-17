@@ -185,7 +185,7 @@ class ModalEdit extends React.Component<TProps, TState> {
               onClick={this.confirmModal}
               style={{margin: 0, borderRadius: 0}}
             >
-              <Icon name="checkmark" /> {this.state.hasEdited ? "Edit" : "Read"}
+              {this.state.hasEdited ? "Edit" : "Read"}
             </Button>
             <Button
               attached="left"

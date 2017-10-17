@@ -145,7 +145,7 @@ class Mobile extends React.Component<TProps, TState> {
   }
 
   private renderShowingCardModal = (card: TCard): JSX.Element => {
-    const formattedDescription = _.replace(card.description, "\n", "<br>");
+    const formattedDescription = card.description.split("\n");
     return (
       <Modal
         open={true}
@@ -153,16 +153,36 @@ class Mobile extends React.Component<TProps, TState> {
       >
         <Modal.Header>{card.author}</Modal.Header>
         <Modal.Content>
-          <Modal.Description>
+          <Modal.Description style={{overflowWrap: "break-word"}}>
             {card.status.type !== "resolved"
-              ? <p style={{overflowWrap: "break-word", fontSize: "1.5rem"}}>{formattedDescription}</p>
+              ? formattedDescription.map((text) => {
+                  return (
+                    <p
+                      key={_.uniqueId()}
+                      style={{overflowWrap: "break-word", fontSize: "1.5rem"}}
+                    >
+                      {text}
+                      <br/>
+                    </p>
+                  );
+                })
               : <div>
                   <p style={{overflowWrap: "break-word", fontSize: "1.5rem"}}>{formattedDescription}</p>
                   <Divider horizontal>Resolved with</Divider>
-                  <div style={{overflowWrap: "break-word", fontSize: "1.5rem"}}>{
-                    _.replace(card.status.message, "\n", "\<br\>")
-                  }</div>
-              </div>
+                  {
+                    card.status.message.split("\n").map((text) => {
+                      return (
+                        <p
+                          key={_.uniqueId()}
+                          style={{overflowWrap: "break-word", fontSize: "1.5rem"}}
+                        >
+                          {text}
+                          <br/>
+                        </p>
+                      );
+                    })
+                  }
+                </div>
             }
           </Modal.Description>
         </Modal.Content>
@@ -172,9 +192,7 @@ class Mobile extends React.Component<TProps, TState> {
 
   public renderButtons = () => {
     const buttonStyle = {
-      justifyContent: "center",
       flex: 1,
-      display: "flex",
       margin: 0,
       borderRadius: 0,
     };
@@ -188,6 +206,7 @@ class Mobile extends React.Component<TProps, TState> {
           color={colors[index]}
           style={buttonStyle}
           onClick={addCardFunc}
+          fluid
         >
           {col.title}
         </Button>

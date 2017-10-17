@@ -6,6 +6,7 @@ import {
 
 export const initialUserState: TUserState = {
   user: undefined,
+  // user: {name: "test"},
 };
 
 export const userReducer = (state: TUserState = initialUserState, action: TUserAction) => {
