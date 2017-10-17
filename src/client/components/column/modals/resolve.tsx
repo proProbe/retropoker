@@ -117,7 +117,10 @@ class ModalResolve extends React.Component<TProps, TState> {
     this.props.socketMobileShowCard(nextCard);
     return this.setState({
       currentIndex: this.state.currentIndex + 1,
-      cardToResolve: nextCard,
+      cardToResolve: {
+        ...nextCard,
+        status: nextCard.status.type === "resolved" ? nextCard.status : {type: "resolved", message: ""},
+      },
     });
   }
 
@@ -132,7 +135,10 @@ class ModalResolve extends React.Component<TProps, TState> {
     this.props.socketMobileShowCard(nextCard);
     return this.setState({
       currentIndex: this.state.currentIndex - 1,
-      cardToResolve: nextCard,
+      cardToResolve: {
+        ...nextCard,
+        status: nextCard.status.type === "resolved" ? nextCard.status : {type: "resolved", message: ""},
+      },
     });
   }
 

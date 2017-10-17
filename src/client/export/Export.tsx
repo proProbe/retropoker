@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import _ from "lodash";
 import { connect } from "react-redux";
 import { RootState } from "../redux/store";
 import { returntypeof, getColumnColor, getCardColor } from "../utils/utils";
@@ -70,19 +71,32 @@ class ExportView extends React.Component<TProps, TState> {
                           }}
                         >
                           <Segment color={getCardColor(card.status)}>
-                            <Header as="h4">
-                              {card.author}: {card.description}
-                            </Header>
+                            <div>
+                              <b>{card.author}:</b> {card.description}
+                            </div>
                             { card.status.type !== "resolved"
                               ? <div />
                               : <div>
-                                  <Divider horizontal> Resolved with </Divider>
-                                  <p>
-                                    { !!card.status.message
-                                      ? card.status.message
-                                      : "NA"
+                                  <Divider
+                                    horizontal
+                                    style={{fontStyle: "italic", fontWeight: "300"}}
+                                  >
+                                    Resolved with
+                                  </Divider>
+                                    { !card.status.message
+                                      ? <p>NA</p>
+                                      : card.status.message.split("\n").map((text) => {
+                                          return (
+                                            <p
+                                              key={_.uniqueId()}
+                                              style={{overflowWrap: "break-word"}}
+                                            >
+                                              {text}
+                                              <br/>
+                                            </p>
+                                          );
+                                        })
                                     }
-                                  </p>
                               </div>
                             }
                           </Segment>
@@ -110,13 +124,7 @@ const mapStateToProps = (state: RootState) => {
 };
 const mapStateProps = returntypeof(mapStateToProps);
 
-const dispatchToProps = {
-  // addCardToColumn: boardActions.actionCreators.addCardToColumn,
-  // changeCard: boardActions.actionCreators.changeCard,
-  // throwError: errorHandlerActions.actionCreators.throwError,
-  // socketAddCardToColumn: addCardEpicActions.actionCreators.socketAddCardToColumn,
-  // mobileSetCurrentCard: mobileActions.actionCreators.mobileShowCard,
-};
+const dispatchToProps = { };
 
 export default connect(
   mapStateToProps,
