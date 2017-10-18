@@ -52,12 +52,15 @@ class Mobile extends React.Component<TProps, TState> {
         open={true}
         size="fullscreen"
       >
-        <Modal.Header style={{display: "flex"}}>
-          <div style={{flex: 1}}>
-            {card.author}
-          </div>
-          <Icon name="close" onClick={() => this.props.mobileSetCurrentCard(undefined)}/>
-        </Modal.Header>
+        <Icon
+          fitted
+          name="close"
+          onClick={() => this.props.mobileSetCurrentCard(undefined)}
+          style={{
+            paddingTop: "0.4rem",
+          }}
+        />
+        <Header>{card.author}</Header>
         <Modal.Content>
           <Modal.Description style={{overflowWrap: "break-word"}}>
             {card.status.type !== "resolved"
@@ -78,13 +81,13 @@ class Mobile extends React.Component<TProps, TState> {
                   {
                     card.status.message.split("\n").map((text) => {
                       return (
-                        <p
+                        <div
                           key={_.uniqueId()}
                           style={{overflowWrap: "break-word", fontSize: "1.5rem"}}
                         >
                           {text}
                           <br/>
-                        </p>
+                        </div>
                       );
                     })
                   }
