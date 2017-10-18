@@ -1,13 +1,13 @@
 import React from "react";
 import _ from "lodash";
-import { TCard } from "../../card/card.types";
+import { TCard } from "../../desktop/card/card.types";
 import { connect } from "react-redux";
-import { RootState } from "../../../../redux/store";
-import { returntypeof } from "../../../../utils/utils";
+import { RootState } from "../../../redux/store";
+import { returntypeof } from "../../../utils/utils";
 import { Icon, Form, Modal, Button } from "semantic-ui-react";
-import TextArea from "../../../common/textarea/textArea";
-import * as errorHandlerActions from "../../../../redux/errorHandler/actions";
-import * as addCardEpicActions from "../../../../redux/epics/index";
+import TextArea from "../../common/textarea/textArea";
+import * as errorHandlerActions from "../../../redux/errorHandler/actions";
+import * as addCardEpicActions from "../../../redux/epics/index";
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & {
   columnId: string,
@@ -17,7 +17,7 @@ type TProps = typeof dispatchToProps & typeof mapStateProps & {
 type TState = {
   card: TCard,
 };
-class ModalAdd extends React.Component<TProps, TState> {
+class MobileAddModal extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
     this.state = {
@@ -95,7 +95,7 @@ class ModalAdd extends React.Component<TProps, TState> {
             style={{
               display: "flex",
               justifyContent: "center",
-              paddingTop: 40,
+              paddingTop: 20,
             }}
           >
             <Button.Group
@@ -104,11 +104,11 @@ class ModalAdd extends React.Component<TProps, TState> {
                 alignItems: "center",
               }}
             >
-              <Button size="massive" color="red" inverted onClick={this.closeModal}>
+              <Button size="big" color="red" inverted onClick={this.closeModal}>
                 <Icon name="remove" /> Cancel
               </Button>
               <Button.Or/>
-              <Button size="massive" color="green" inverted onClick={this.confirmModal}>
+              <Button size="big" color="green" inverted onClick={this.confirmModal}>
                 <Icon name="checkmark" /> Confirm
               </Button>
             </Button.Group>
@@ -138,4 +138,4 @@ const dispatchToProps = {
 export default connect(
   mapStateToProps,
   dispatchToProps,
-)(ModalAdd);
+)(MobileAddModal);

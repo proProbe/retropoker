@@ -32,10 +32,6 @@ class LoginModal extends React.Component<TProps, TState> {
   }
 
   private handleUserChange = (event: React.SyntheticEvent<any>): void => {
-    // if (!this.state.user.name) {
-    //   this.props.throwError({ message: "Error with setting user", type: "warning" });
-    //   return;
-    // }
     const target = event.target as HTMLInputElement;
     return this.setState({
       user: {
@@ -71,7 +67,7 @@ class LoginModal extends React.Component<TProps, TState> {
         basic
       >
         <Modal.Content>
-          <Header as="h1" inverted>Can not find user. Join with new: </Header>
+          <Header as="h1" inverted>Insert name</Header>
           {this.renderForm()}
           <div
             style={{
@@ -80,12 +76,12 @@ class LoginModal extends React.Component<TProps, TState> {
             }}
           >
           <Button
-            style={{fontSize: "1.4rem"}}
+            style={{fontSize: "1.4rem", marginTop: 20}}
             color="green"
             inverted
             onClick={this.confirmModal}
           >
-            <Icon name="checkmark" /> Confirm
+            <Icon name="checkmark" /> Join
           </Button>
           </div>
         </Modal.Content>

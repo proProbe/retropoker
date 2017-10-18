@@ -6,7 +6,7 @@ import {
 
 // Action Creators
 export const actionCreators = {
-  mobileShowCard: (card: TCard): MOBILE_SHOW_CARD_ACTION => ({
+  mobileShowCard: (card?: TCard): MOBILE_SHOW_CARD_ACTION => ({
     type: MOBILE_SHOW_CARD,
     card: card,
   }),
