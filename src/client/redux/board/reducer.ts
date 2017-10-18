@@ -1,4 +1,4 @@
-import { TBoard } from "../../components/board/board.types";
+import { TBoard } from "../../views/desktop/board/board.types";
 import {
   ADD_CARD_TO_COLUMN,
   CHANGE_ALL_CARD_STATUS,

@@ -1,10 +1,10 @@
 import React from "react";
 import { TController } from "./controller.types";
 import { connect } from "react-redux";
-import { RootState } from "../../redux/store";
-import { returntypeof } from "../../utils/utils";
-import * as boardActions from "../../redux/board/actions";
-import * as socketActions from "../../redux/epics/index";
+import { RootState } from "../../../redux/store";
+import { returntypeof } from "../../../utils/utils";
+import * as boardActions from "../../../redux/board/actions";
+import * as socketActions from "../../../redux/epics/index";
 import { Form, Radio, Segment, Button, Divider } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 

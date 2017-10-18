@@ -1,12 +1,12 @@
 import React from "react";
 import _ from "lodash";
 import { connect } from "react-redux";
-import { RootState } from "../redux/store";
-import { returntypeof } from "../utils/utils";
-import * as addCardEpicActions from "../redux/epics/index";
-import * as errorHandlerActions from "../redux/errorHandler/actions";
-import * as mobileActions from "../redux/mobile/actions";
-import { TCard } from "../components/card/card.types";
+import { RootState } from "../../redux/store";
+import { returntypeof } from "../../utils/utils";
+import * as addCardEpicActions from "../../redux/epics/index";
+import * as errorHandlerActions from "../../redux/errorHandler/actions";
+import * as mobileActions from "../../redux/mobile/actions";
+import { TCard } from "../desktop/card/card.types";
 import { Divider, Header, Dimmer, SemanticCOLORS, Icon, TextArea, Form, Modal, Button } from "semantic-ui-react";
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & {};
@@ -274,8 +274,6 @@ const mapStateToProps = (state: RootState) => {
 const mapStateProps = returntypeof(mapStateToProps);
 
 const dispatchToProps = {
-  // addCardToColumn: boardActions.actionCreators.addCardToColumn,
-  // changeCard: boardActions.actionCreators.changeCard,
   throwError: errorHandlerActions.actionCreators.throwError,
   socketAddCardToColumn: addCardEpicActions.actionCreators.socketAddCardToColumn,
   mobileSetCurrentCard: mobileActions.actionCreators.mobileShowCard,

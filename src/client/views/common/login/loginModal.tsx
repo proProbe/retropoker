@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { RootState } from "../../../../redux/store";
-import { returntypeof } from "../../../../utils/utils";
+import { RootState } from "../../../redux/store";
+import { returntypeof } from "../../../utils/utils";
 import { Header, Icon, Input, Form, Modal, Button } from "semantic-ui-react";
-import * as userActions from "../../../../redux/user/actions";
-import * as errorHandlerActions from "../../../../redux/errorHandler/actions";
+import * as userActions from "../../../redux/user/actions";
+import * as errorHandlerActions from "../../../redux/errorHandler/actions";
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & {
   showing: boolean,

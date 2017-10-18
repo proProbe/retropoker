@@ -1,5 +1,5 @@
 import { SemanticCOLORS } from "semantic-ui-react";
-import { TCardStatus } from "../components/card/card.types";
+import { TCardStatus } from "../views/desktop/card/card.types";
 
 /**
  * @export returntypeof() - extract return type of an "expression"

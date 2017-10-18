@@ -1,6 +1,6 @@
 import React from "react";
 import Board from "./board/board";
-import ErrorModal from "./common/errorHandlers/modal/errorModal";
+import ErrorModal from "../common/errorHandlers/errorModal";
 
 type TProps = {};
 export default class Desktop extends React.PureComponent<TProps, any> {

@@ -1,5 +1,5 @@
-import { TCard, TCardStatus } from "../../components/card/card.types";
-import { TBoardState } from "../../components/board/board.types";
+import { TCard, TCardStatus } from "../../views/desktop/card/card.types";
+import { TBoardState } from "../../views/desktop/board/board.types";
 import {
   ADD_CARD_TO_COLUMN,
   ADD_CARD_TO_COLUMN_ACTION,

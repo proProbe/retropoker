@@ -1,4 +1,4 @@
-import { TCard, TCardStatus } from "../../components/card/card.types";
+import { TCard, TCardStatus } from "../../views/desktop/card/card.types";
 
 export const ADD_CARD_TO_COLUMN = "ADD_CARD_TO_COLUMN";
 export type ADD_CARD_TO_COLUMN_ACTION = {

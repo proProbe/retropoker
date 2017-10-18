@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { RootState } from "../../../../redux/store";
-import { returntypeof } from "../../../../utils/utils";
-import { actionCreators } from "../../../../redux/errorHandler/actions";
+import { RootState } from "../../../redux/store";
+import { returntypeof } from "../../../utils/utils";
+import { actionCreators } from "../../../redux/errorHandler/actions";
 import { Button, Header, Modal, Icon } from "semantic-ui-react";
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & {

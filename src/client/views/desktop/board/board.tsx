@@ -1,10 +1,11 @@
 import React from "react";
 import Column from "../column/column";
+import { TColumn } from "../column/column.types";
 import Controller from "../controller/controller";
 import { connect } from "react-redux";
-import { RootState } from "../../redux/store";
-import { actionCreators } from "../../redux/board/actions";
-import { returntypeof } from "../../utils/utils";
+import { RootState } from "../../../redux/store";
+import { actionCreators } from "../../../redux/board/actions";
+import { returntypeof } from "../../../utils/utils";
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & {
 
@@ -24,7 +25,7 @@ class Board extends React.Component<TProps, TState> {
   }
 
   private renderColumns(): JSX.Element[] {
-    return this.props.columns.map((col) => <Column key={col.id} {...col} />);
+    return this.props.columns.map((col: TColumn) => <Column key={col.id} {...col} />);
   }
 
   public render(): JSX.Element {

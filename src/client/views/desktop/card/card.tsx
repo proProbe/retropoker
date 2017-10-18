@@ -1,8 +1,8 @@
 import React from "react";
 import { TCard } from "./card.types";
 import { connect } from "react-redux";
-import { RootState } from "../../redux/store";
-import { returntypeof, getCardColor } from "../../utils/utils";
+import { RootState } from "../../../redux/store";
+import { returntypeof, getCardColor } from "../../../utils/utils";
 import { SemanticCOLORS, Segment, Header } from "semantic-ui-react";
 
 type TProps = TCard & typeof mapStateProps & {

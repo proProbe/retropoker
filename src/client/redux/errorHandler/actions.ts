@@ -1,4 +1,4 @@
-import { TError } from "../../components/common/errorHandlers/error.types";
+import { TError } from "../../views/common/errorHandlers/error.types";
 import {
   THROW_ERROR,
   THROW_ERROR_ACTION,

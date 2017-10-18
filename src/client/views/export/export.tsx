@@ -2,8 +2,9 @@ import React from "react";
 import moment from "moment";
 import _ from "lodash";
 import { connect } from "react-redux";
-import { RootState } from "../redux/store";
-import { returntypeof, getColumnColor, getCardColor } from "../utils/utils";
+import { TColumn } from "../desktop/column/column.types";
+import { RootState } from "../../redux/store";
+import { returntypeof, getColumnColor, getCardColor } from "../../utils/utils";
 import { Segment, Divider, Header } from "semantic-ui-react";
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & {};
@@ -42,7 +43,7 @@ class ExportView extends React.Component<TProps, TState> {
           }}
         >
           {
-            this.props.columns.map((col) => {
+            this.props.columns.map((col: TColumn) => {
               return (
                 <div
                   key={col.id}

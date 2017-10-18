@@ -1,16 +1,16 @@
 import React from "react";
-import FilterLink from "./components/common/navigation/filterLink";
+import FilterLink from "./views/common/navigation/filterLink";
 import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import * as cardEpicActions from "./redux/epics/index";
 import * as userActions from "./redux/user/actions";
-import Desktop from "./components/Desktop";
-import Mobile from "./mobile/Mobile";
-import ExportView from "./export/Export";
+import Desktop from "./views/desktop/desktop";
+import Mobile from "./views/mobile/mobile";
+import ExportView from "./views/export/export";
 import { Button } from "semantic-ui-react";
 import { RootState } from "./redux/store";
 import { returntypeof } from "./utils/utils";
-import LoginModal from "./components/common/login/modal/modal";
+import LoginModal from "./views/common/login/loginModal";
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & { };
 type TState = { };

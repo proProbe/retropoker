@@ -1,4 +1,4 @@
-import { TError } from "../../components/common/errorHandlers/error.types";
+import { TError } from "../../views/common/errorHandlers/error.types";
 
 export const THROW_ERROR = "THROW_ERROR";
 export type THROW_ERROR_ACTION = {

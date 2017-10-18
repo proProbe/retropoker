@@ -2,12 +2,12 @@ import React from "react";
 import _ from "lodash";
 import { TCard } from "../../card/card.types";
 import { connect } from "react-redux";
-import { RootState } from "../../../redux/store";
-import { returntypeof } from "../../../utils/utils";
+import { RootState } from "../../../../redux/store";
+import { returntypeof } from "../../../../utils/utils";
 import { Icon, Form, Modal, Button } from "semantic-ui-react";
-import TextArea from "../../common/textarea/textArea";
-import * as errorHandlerActions from "../../../redux/errorHandler/actions";
-import * as addCardEpicActions from "../../../redux/epics/index";
+import TextArea from "../../../common/textarea/textArea";
+import * as errorHandlerActions from "../../../../redux/errorHandler/actions";
+import * as addCardEpicActions from "../../../../redux/epics/index";
 
 type TProps = typeof dispatchToProps & typeof mapStateProps & {
   columnId: string,

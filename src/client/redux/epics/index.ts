@@ -4,8 +4,8 @@ import { combineEpics, ActionsObservable } from "redux-observable";
 import { Observable } from "rxjs";
 import { MiddlewareAPI } from "redux";
 import { RootState, RootAction } from "../store";
-import { TCard } from "../../components/card/card.types";
-import { TBoardState } from "../../components/board/board.types";
+import { TCard } from "../../views/desktop/card/card.types";
+import { TBoardState } from "../../views/desktop/board/board.types";
 
 export const SOCKET_ADD_CARD = "SOCKET_ADD_CARD";
 export type SOCKET_ADD_CARD_ACTION = {

@@ -1,4 +1,4 @@
-import { TCard } from "../../components/card/card.types";
+import { TCard } from "../../views/desktop/card/card.types";
 
 export const MOBILE_SHOW_CARD = "MOBILE_SHOW_CARD";
 export type MOBILE_SHOW_CARD_ACTION = {

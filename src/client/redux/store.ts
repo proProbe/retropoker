@@ -3,7 +3,7 @@ import { createEpicMiddleware } from "redux-observable";
 import logger from "redux-logger";
 import { boardReducer } from "./board/reducer";
 import { TBoardAction } from "./board/types";
-import { TBoard } from "../components/board/board.types";
+import { TBoard } from "../views/desktop/board/board.types";
 import { errorHandlerReducer } from "./errorHandler/reducer";
 import { TErrorHandlerState, TErrorAction } from "./errorHandler/types";
 import { userReducer } from "./user/reducer";

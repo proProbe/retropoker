@@ -3,11 +3,11 @@ import _ from "lodash";
 import { TCard, TCardStatus } from "../../card/card.types";
 import { TColumn } from "../column.types";
 import { connect } from "react-redux";
-import { RootState } from "../../../redux/store";
-import { returntypeof } from "../../../utils/utils";
+import { RootState } from "../../../../redux/store";
+import { returntypeof } from "../../../../utils/utils";
 import { Divider, Header, Segment, Icon, Form, Modal, Button } from "semantic-ui-react";
-import TextArea from "../../common/textarea/textArea";
-import * as addCardEpicActions from "../../../redux/epics/index";
+import TextArea from "../../../common/textarea/textArea";
+import * as addCardEpicActions from "../../../../redux/epics/index";
 
 const unknownCard: TCard = {
   id: "",
@@ -65,7 +65,7 @@ class ModalResolve extends React.Component<TProps, TState> {
   }
 
   private getColumn = (colId: string): TColumn | undefined => {
-    return this.props.columns.find((col) => {
+    return this.props.columns.find((col: TColumn) => {
       return col.id === colId;
     });
   }
