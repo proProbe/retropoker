@@ -2,8 +2,8 @@ import React from "react";
 import { TCard } from "../../desktop/card/card.types";
 import { connect } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { returntypeof } from "../../../utils/utils";
-import { Icon, Form, Modal, Button } from "semantic-ui-react";
+import { returntypeof, getCardColor } from "../../../utils/utils";
+import { Label, Icon, Form, Modal, Button } from "semantic-ui-react";
 import TextArea from "../../common/textarea/textArea";
 import * as addCardEpicActions from "../../../redux/epics/index";
 
@@ -21,9 +21,7 @@ type TProps = typeof dispatchToProps & typeof mapStateProps & {
 };
 type TState = {
   cardToEdit: TCard,
-  cardsToView: TCard[],
   currentIndex: number,
-  hasEdited: boolean,
 };
 class MobileModalEdit extends React.Component<TProps, TState> {
   constructor(props: TProps) {
@@ -34,9 +32,7 @@ class MobileModalEdit extends React.Component<TProps, TState> {
 
     this.state = {
       cardToEdit: card,
-      cardsToView: this.getCards(),
       currentIndex: 0,
-      hasEdited: false,
     };
   }
 
@@ -80,48 +76,7 @@ class MobileModalEdit extends React.Component<TProps, TState> {
       description: target.value,
     };
     return this.setState({
-      hasEdited: true,
       cardToEdit: newCard,
-    });
-  }
-
-  private hasNextCard = (): boolean => {
-    const nextCard = this.state.cardsToView[this.state.currentIndex + 1];
-    return !!nextCard;
-  }
-
-  private hasPreviousCard = (): boolean => {
-    const nextCard = this.state.cardsToView[this.state.currentIndex - 1];
-    return !!nextCard;
-  }
-
-  private nextCard = (): void => {
-    if (!this.hasNextCard()) {
-      return;
-    }
-    this.props.socketEditCard({
-      ...this.state.cardToEdit,
-      status: {type: "read"},
-    });
-    const nextCard = this.state.cardsToView[this.state.currentIndex + 1];
-    return this.setState({
-      currentIndex: this.state.currentIndex + 1,
-      cardToEdit: nextCard,
-    });
-  }
-
-  private previousCard = (): void => {
-    if (!this.hasPreviousCard()) {
-      return;
-    }
-    this.props.socketEditCard({
-      ...this.state.cardToEdit,
-      status: {type: "read"},
-    });
-    const nextCard = this.state.cardsToView[this.state.currentIndex - 1];
-    return this.setState({
-      currentIndex: this.state.currentIndex - 1,
-      cardToEdit: nextCard,
     });
   }
 
@@ -143,6 +98,8 @@ class MobileModalEdit extends React.Component<TProps, TState> {
   }
 
   private renderModal = (): JSX.Element => {
+    const maybeOriginalCard = this.getCard(this.state.cardToEdit.id);
+
     return (
       <Modal
         open={true}
@@ -153,64 +110,43 @@ class MobileModalEdit extends React.Component<TProps, TState> {
           marginTop: 0,
         }}
       >
-        <Modal.Header>{this.state.cardToEdit.author}</Modal.Header>
+        <Modal.Header>
+        <div style={{display: "flex"}}>
+            <div style={{padding: "0 10px 0 0"}}>
+              {this.state.cardToEdit.author}
+            </div>
+            { !maybeOriginalCard
+                ? <div/>
+                : <Label color={getCardColor(maybeOriginalCard.status)}>
+                    {maybeOriginalCard.status.type}
+                  </Label>
+            }
+          </div>
+        </Modal.Header>
         <Modal.Content>
           {this.renderForm()}
           <div
             style={{
               display: "flex",
               justifyContent: "center",
-              paddingTop: 40,
+              paddingTop: 20,
             }}
           >
-            <Button
-              attached="right"
-              size="massive"
-              color="green"
-              inverted
-              onClick={this.previousCard}
-              style={{paddingRight: 0, borderRadius: 0}}
-            >
-              <Icon name="left chevron" />
-            </Button>
-            <Button
-              size="massive"
-              inverted
-              color="green"
-              onClick={this.confirmModal}
-              style={{margin: 0, borderRadius: 0}}
-            >
-              Edit
-            </Button>
-            <Button
-              attached="left"
-              size="massive"
-              color="green"
-              inverted
-              onClick={this.nextCard}
-              style={{paddingLeft: 0, borderRadius: 0}}
-            >
-              <Icon name="right chevron" />
-            </Button>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              paddingTop: 30,
-            }}
-          >
-            <Button
-              size="massive"
-              color="red"
-              inverted
-              onClick={this.closeModal}
+            <Button.Group
               style={{
-                borderRadius: 0,
+                display: "flex",
+                alignItems: "center",
+                flex: 1,
               }}
             >
-              <Icon name="remove" /> Cancel
-            </Button>
+              <Button size="big" color="red" inverted onClick={this.closeModal} style={{flex: 1}}>
+                <Icon name="remove" /> Cancel
+              </Button>
+              <Button.Or/>
+              <Button size="big" color="green" inverted onClick={this.confirmModal} style={{flex: 1}}>
+                <Icon name="checkmark" /> Edit
+              </Button>
+            </Button.Group>
           </div>
         </Modal.Content>
       </Modal>

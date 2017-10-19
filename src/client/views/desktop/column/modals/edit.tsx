@@ -3,8 +3,8 @@ import { TCard } from "../../card/card.types";
 import { TColumn } from "../column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../../../redux/store";
-import { returntypeof } from "../../../../utils/utils";
-import { Icon, Form, Modal, Button } from "semantic-ui-react";
+import { returntypeof, getCardColor } from "../../../../utils/utils";
+import { Icon, Form, Modal, Button, Label } from "semantic-ui-react";
 import TextArea from "../../../common/textarea/textArea";
 import * as addCardEpicActions from "../../../../redux/epics/index";
 
@@ -23,7 +23,6 @@ type TProps = typeof dispatchToProps & typeof mapStateProps & {
 };
 type TState = {
   cardToEdit: TCard,
-  cardsToView: TCard[],
   currentIndex: number,
   hasEdited: boolean,
 };
@@ -34,33 +33,27 @@ class ModalEdit extends React.Component<TProps, TState> {
     const maybeCard = this.getCard(props.columnId, props.cardId);
     const card = maybeCard ? maybeCard : unknownCard;
 
-    const maybeColumn = this.getColumn(props.columnId);
-    const cardsToView = maybeColumn ? maybeColumn.cards : [];
-
     props.socketMobileShowCard(card);
     this.state = {
       cardToEdit: card,
-      cardsToView: cardsToView,
       currentIndex: 0,
       hasEdited: false,
     };
   }
 
   private getCard = (colId: string, cardId: string): TCard | undefined => {
-    const maybeColumn = this.getColumn(colId);
-    if (!maybeColumn) {
-      return ;
-    }
-    const maybeCard = maybeColumn.cards.find((card: TCard) => {
+    const cards = this.getCards(colId);
+    const maybeCard = cards.find((card: TCard) => {
       return card.id === cardId;
     });
     return maybeCard;
   }
 
-  private getColumn = (colId: string): TColumn | undefined => {
-    return this.props.columns.find((col: TColumn) => {
+  private getCards = (colId: string): TCard[] => {
+    const maybeColumn = this.props.columns.find((col: TColumn) => {
       return col.id === colId;
     });
+    return maybeColumn ? maybeColumn.cards : [];
   }
 
   private confirmModal = (): void => {
@@ -89,12 +82,12 @@ class ModalEdit extends React.Component<TProps, TState> {
   }
 
   private hasNextCard = (): boolean => {
-    const nextCard = this.state.cardsToView[this.state.currentIndex + 1];
+    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex + 1];
     return !!nextCard;
   }
 
   private hasPreviousCard = (): boolean => {
-    const nextCard = this.state.cardsToView[this.state.currentIndex - 1];
+    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex - 1];
     return !!nextCard;
   }
 
@@ -106,7 +99,7 @@ class ModalEdit extends React.Component<TProps, TState> {
       ...this.state.cardToEdit,
       status: {type: "read"},
     });
-    const nextCard = this.state.cardsToView[this.state.currentIndex + 1];
+    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex + 1];
     this.props.socketMobileShowCard(nextCard);
     return this.setState({
       currentIndex: this.state.currentIndex + 1,
@@ -122,7 +115,7 @@ class ModalEdit extends React.Component<TProps, TState> {
       ...this.state.cardToEdit,
       status: {type: "read"},
     });
-    const nextCard = this.state.cardsToView[this.state.currentIndex - 1];
+    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex - 1];
     this.props.socketMobileShowCard(nextCard);
     return this.setState({
       currentIndex: this.state.currentIndex - 1,
@@ -148,6 +141,7 @@ class ModalEdit extends React.Component<TProps, TState> {
   }
 
   private renderModal = (): JSX.Element => {
+    const maybeOriginalCard = this.getCard(this.props.columnId, this.state.cardToEdit.id);
     return (
       <Modal
         open={true}
@@ -158,7 +152,19 @@ class ModalEdit extends React.Component<TProps, TState> {
           marginTop: 0,
         }}
       >
-        <Modal.Header>{this.state.cardToEdit.author}</Modal.Header>
+        <Modal.Header>
+          <div style={{display: "flex"}}>
+            <div style={{padding: "0 10px 0 0"}}>
+              {this.state.cardToEdit.author}
+            </div>
+            { !maybeOriginalCard
+                ? <div/>
+                : <Label color={getCardColor(maybeOriginalCard.status)}>
+                    {maybeOriginalCard.status.type}
+                  </Label>
+            }
+          </div>
+        </Modal.Header>
         <Modal.Content>
           {this.renderForm()}
           <div

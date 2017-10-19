@@ -4,8 +4,8 @@ import { TCard, TCardStatus } from "../../card/card.types";
 import { TColumn } from "../column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../../../redux/store";
-import { returntypeof } from "../../../../utils/utils";
-import { Divider, Header, Segment, Icon, Form, Modal, Button } from "semantic-ui-react";
+import { returntypeof, getCardColor } from "../../../../utils/utils";
+import { Label, Divider, Header, Segment, Icon, Form, Modal, Button } from "semantic-ui-react";
 import TextArea from "../../../common/textarea/textArea";
 import * as addCardEpicActions from "../../../../redux/epics/index";
 
@@ -24,7 +24,6 @@ type TProps = typeof dispatchToProps & typeof mapStateProps & {
 };
 type TState = {
   cardToResolve: TCard,
-  cardsToView: TCard[],
   currentIndex: number,
 };
 class ModalResolve extends React.Component<TProps, TState> {
@@ -40,34 +39,28 @@ class ModalResolve extends React.Component<TProps, TState> {
         status: {type: "resolved", message: ""} as TCardStatus,
       };
 
-    const maybeColumn = this.getColumn(props.columnId);
-    const cardsToView = maybeColumn ? maybeColumn.cards : [];
-
     props.socketMobileShowCard(card);
     this.state = {
       cardToResolve: {
         ...resolveCard,
       },
-      cardsToView: cardsToView,
       currentIndex: 0,
     };
   }
 
   private getCard = (colId: string, cardId: string): TCard | undefined => {
-    const maybeColumn = this.getColumn(colId);
-    if (!maybeColumn) {
-      return ;
-    }
-    const maybeCard = maybeColumn.cards.find((card: TCard) => {
+    const cards = this.getCards(colId);
+    const maybeCard = cards.find((card: TCard) => {
       return card.id === cardId;
     });
     return maybeCard;
   }
 
-  private getColumn = (colId: string): TColumn | undefined => {
-    return this.props.columns.find((col: TColumn) => {
+  private getCards = (colId: string): TCard[] => {
+    const maybeColumn = this.props.columns.find((col: TColumn) => {
       return col.id === colId;
     });
+    return maybeColumn ? maybeColumn.cards : [];
   }
 
   private confirmModal = (): void => {
@@ -97,12 +90,12 @@ class ModalResolve extends React.Component<TProps, TState> {
   }
 
   private hasNextCard = (): boolean => {
-    const nextCard = this.state.cardsToView[this.state.currentIndex + 1];
+    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex + 1];
     return !!nextCard;
   }
 
   private hasPreviousCard = (): boolean => {
-    const nextCard = this.state.cardsToView[this.state.currentIndex - 1];
+    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex - 1];
     return !!nextCard;
   }
 
@@ -113,7 +106,7 @@ class ModalResolve extends React.Component<TProps, TState> {
     this.props.socketEditCard({
       ...this.state.cardToResolve,
     });
-    const nextCard = this.state.cardsToView[this.state.currentIndex + 1];
+    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex + 1];
     this.props.socketMobileShowCard(nextCard);
     return this.setState({
       currentIndex: this.state.currentIndex + 1,
@@ -131,7 +124,7 @@ class ModalResolve extends React.Component<TProps, TState> {
     this.props.socketEditCard({
       ...this.state.cardToResolve,
     });
-    const nextCard = this.state.cardsToView[this.state.currentIndex - 1];
+    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex - 1];
     this.props.socketMobileShowCard(nextCard);
     return this.setState({
       currentIndex: this.state.currentIndex - 1,
@@ -166,6 +159,7 @@ class ModalResolve extends React.Component<TProps, TState> {
   }
 
   private renderModal = (): JSX.Element => {
+    const maybeOriginalCard = this.getCard(this.props.columnId, this.state.cardToResolve.id);
     return (
       <Modal
         open={true}
@@ -176,7 +170,19 @@ class ModalResolve extends React.Component<TProps, TState> {
           marginTop: 0,
         }}
       >
-        <Modal.Header>{this.state.cardToResolve.author}</Modal.Header>
+        <Modal.Header>
+          <div style={{display: "flex"}}>
+            <div style={{padding: "0 10px 0 0"}}>
+              {this.state.cardToResolve.author}
+            </div>
+            { !maybeOriginalCard
+                ? <div/>
+                : <Label color={getCardColor(maybeOriginalCard.status)}>
+                    {maybeOriginalCard.status.type}
+                  </Label>
+            }
+          </div>
+        </Modal.Header>
         <Modal.Content>
           <Segment>
             <Header as="h1" style={{overflowWrap: "break-word"}}>
@@ -269,6 +275,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     user: state.user.user,
     columns: state.board.columns,
+    boardState: state.board.state,
   };
 };
 

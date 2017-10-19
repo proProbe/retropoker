@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 import { connect } from "react-redux";
 import { RootState } from "../../redux/store";
-import { returntypeof, getColumnColor } from "../../utils/utils";
+import { returntypeof, getColumnColor, getCardColor } from "../../utils/utils";
 import * as addCardEpicActions from "../../redux/epics/index";
 import * as errorHandlerActions from "../../redux/errorHandler/actions";
 import * as mobileActions from "../../redux/mobile/actions";
@@ -10,6 +10,7 @@ import { TCard } from "../desktop/card/card.types";
 import EditModal from "./modals/edit";
 import AddModal from "./modals/add";
 import {
+  Label,
   Sidebar,
   Divider,
   Header,
@@ -60,7 +61,16 @@ class Mobile extends React.Component<TProps, TState> {
             paddingTop: "0.4rem",
           }}
         />
-        <Header>{card.author}</Header>
+        <Header>{card.author}
+        <div style={{display: "flex"}}>
+            <div style={{padding: "0 10px 0 0"}}>
+              {card.author}
+            </div>
+            <Label color={getCardColor(card.status)}>
+              {card.status.type}
+            </Label>
+          </div>
+        </Header>
         <Modal.Content>
           <Modal.Description style={{overflowWrap: "break-word"}}>
             {card.status.type !== "resolved"

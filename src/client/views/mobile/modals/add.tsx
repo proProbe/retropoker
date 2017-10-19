@@ -102,13 +102,14 @@ class MobileAddModal extends React.Component<TProps, TState> {
               style={{
                 display: "flex",
                 alignItems: "center",
+                flex: 1,
               }}
             >
-              <Button size="big" color="red" inverted onClick={this.closeModal}>
+              <Button size="big" color="red" inverted onClick={this.closeModal} style={{flex: 1}}>
                 <Icon name="remove" /> Cancel
               </Button>
               <Button.Or/>
-              <Button size="big" color="green" inverted onClick={this.confirmModal}>
+              <Button size="big" color="green" inverted onClick={this.confirmModal} style={{flex: 1}}>
                 <Icon name="checkmark" /> Confirm
               </Button>
             </Button.Group>

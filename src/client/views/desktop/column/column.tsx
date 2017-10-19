@@ -169,11 +169,12 @@ class Column extends React.Component<TProps, TState> {
         }}
       >
         <Segment
+          disabled={this.props.boardState !== "hidden"}
           color={headerColor}
-          onClick={this.showAddModal}
+          onClick={this.props.boardState === "hidden" ? this.showAddModal : () => { return; }}
           inverted
           style={{
-            cursor: "pointer",
+            cursor: this.props.boardState === "hidden" ? "pointer" : "",
             borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0,
             marginBottom: 0,
