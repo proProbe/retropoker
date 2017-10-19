@@ -76,7 +76,7 @@ class LoginModal extends React.Component<TProps, TState> {
             }}
           >
           <Button
-            style={{fontSize: "1.4rem", marginTop: 20}}
+            style={{fontSize: "1.4rem", margin: "20px 0 0 0", flex: 1}}
             color="green"
             inverted
             onClick={this.confirmModal}
