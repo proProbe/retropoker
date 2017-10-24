@@ -1,4 +1,5 @@
 import { TCard, TCardStatus } from "../../views/desktop/card/card.types";
+import { TUser } from "../../views/desktop/board/board.types";
 
 export const ADD_CARD_TO_COLUMN = "ADD_CARD_TO_COLUMN";
 export type ADD_CARD_TO_COLUMN_ACTION = {
@@ -31,6 +32,7 @@ export type INIT_BOARD_ACTION = {
   board: {
     state: string,
     cards: Array<{columnId: string, card: TCard}>,
+    users: TUser[],
   },
 };
 

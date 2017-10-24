@@ -61,8 +61,8 @@ class Mobile extends React.Component<TProps, TState> {
             paddingTop: "0.4rem",
           }}
         />
-        <Header>{card.author}
-        <div style={{display: "flex"}}>
+        <Header>
+          <div style={{display: "flex"}}>
             <div style={{padding: "0 10px 0 0"}}>
               {card.author}
             </div>
@@ -73,7 +73,7 @@ class Mobile extends React.Component<TProps, TState> {
         </Header>
         <Modal.Content>
           <Modal.Description style={{overflowWrap: "break-word"}}>
-            {card.status.type !== "resolved"
+            {card.status.type !== "resolved" && card.status.type !== "resolving"
               ? formattedDescription.map((text) => {
                   return (
                     <p

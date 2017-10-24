@@ -42,7 +42,10 @@ export function getCardColor({type: cardStatusType}: TCardStatus): SemanticCOLOR
         return "green";
       case "error":
         return "red";
-      default:
+      case "resolving":
+      case "resolved":
         return "purple";
+      default:
+        return "orange";
     }
 }

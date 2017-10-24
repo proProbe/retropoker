@@ -1,6 +1,6 @@
 import React from "react";
 import _ from "lodash";
-import { TCard, TCardStatus } from "../../card/card.types";
+import { TCard, TCardStatus, TCardStatusResolved } from "../../card/card.types";
 import { TColumn } from "../column.types";
 import { connect } from "react-redux";
 import { RootState } from "../../../../redux/store";
@@ -36,10 +36,10 @@ class ModalResolve extends React.Component<TProps, TState> {
       ? card
       : {
         ...card,
-        status: {type: "resolved", message: ""} as TCardStatus,
+        status: {type: "resolving", message: ""} as TCardStatus,
       };
 
-    props.socketMobileShowCard(card);
+    props.socketMobileShowCard(resolveCard);
     this.state = {
       cardToResolve: {
         ...resolveCard,
@@ -64,13 +64,21 @@ class ModalResolve extends React.Component<TProps, TState> {
   }
 
   private confirmModal = (): void => {
-    this.props.socketEditCard({
+    const cardResolveStatus = this.state.cardToResolve.status as TCardStatusResolved;
+    const resolvedCard = {
       ...this.state.cardToResolve,
-    });
+      status: { type: "resolved", message: cardResolveStatus.message },
+    } as TCard;
+    this.props.socketEditCard(resolvedCard);
+    this.props.socketMobileShowCard(resolvedCard);
     return this.props.onConfirm();
   }
 
   private closeModal = (): void => {
+    const maybeCard = this.getCard(this.props.columnId, this.props.cardId);
+    if (maybeCard) {
+      this.props.socketMobileShowCard(maybeCard);
+    }
     return this.props.onClose();
   }
 
@@ -137,7 +145,7 @@ class ModalResolve extends React.Component<TProps, TState> {
 
   private renderForm = (): JSX.Element => {
     const getStatusMessage = (card: TCard) => {
-      if (card.status.type !== "resolved") {
+      if (card.status.type !== "resolved" && card.status.type !== "resolving") {
         return "ERROR: something incorrect here with card type:" + card.status.type + card.id + card.description;
       }
       return card.status.message;
@@ -159,7 +167,6 @@ class ModalResolve extends React.Component<TProps, TState> {
   }
 
   private renderModal = (): JSX.Element => {
-    const maybeOriginalCard = this.getCard(this.props.columnId, this.state.cardToResolve.id);
     return (
       <Modal
         open={true}
@@ -175,12 +182,9 @@ class ModalResolve extends React.Component<TProps, TState> {
             <div style={{padding: "0 10px 0 0"}}>
               {this.state.cardToResolve.author}
             </div>
-            { !maybeOriginalCard
-                ? <div/>
-                : <Label color={getCardColor(maybeOriginalCard.status)}>
-                    {maybeOriginalCard.status.type}
-                  </Label>
-            }
+            <Label color={getCardColor(this.state.cardToResolve.status)}>
+              {this.state.cardToResolve.status.type}
+            </Label>
           </div>
         </Modal.Header>
         <Modal.Content>

@@ -17,6 +17,7 @@ export const initialBoardState: TBoard = {
     {id: "3", title: "Idea", cards: []},
     {id: "4", title: "Flower", cards: []},
   ],
+  users: [],
 };
 
 export const boardReducer = (state: TBoard = initialBoardState, action: TBoardAction) => {
@@ -98,6 +99,7 @@ export const boardReducer = (state: TBoard = initialBoardState, action: TBoardAc
         ...state,
         state: action.board.state,
         columns: newColumns,
+        users: action.board.users,
       };
     }
 

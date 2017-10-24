@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 import { TController } from "./controller.types";
 import { connect } from "react-redux";
 import { RootState } from "../../../redux/store";
@@ -92,8 +93,16 @@ class Controller extends React.Component<TProps, TState> {
           </Form.Field>
         </Form>
         <Divider horizontal>Players</Divider>
-        <div style={{flex: 1, justifyContent: "center", display: "flex"}}>
-          Players
+        <div style={{flex: 1, alignItems: "center", display: "flex", flexDirection: "column"}}>
+          {this.props.players.map((player) => {
+            return (
+              <div
+                key={_.uniqueId("Player-")}
+              >
+                {player.name}
+              </div>
+            );
+          })}
         </div>
         <Link to="/export">
           <Button
@@ -116,6 +125,7 @@ class Controller extends React.Component<TProps, TState> {
 const mapStateToProps = (state: RootState) => {
   return {
     boardState: state.board.state,
+    players: state.board.users,
   };
 };
 

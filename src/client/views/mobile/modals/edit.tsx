@@ -60,7 +60,7 @@ class MobileModalEdit extends React.Component<TProps, TState> {
   private confirmModal = (): void => {
     this.props.socketEditCard({
       ...this.state.cardToEdit,
-      status: {type: "read"},
+      status: {type: "unread"},
     });
     return this.props.onConfirm();
   }

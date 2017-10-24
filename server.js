@@ -15,12 +15,14 @@ const server = app.listen(port, "0.0.0.0", (err, res) => {
   console.log(`Listening on port ${port}`);
 });
 
+let webSockets = {};
+let users = [];
 let board = {
   state: "hidden",
   cards: [],
 }
 
-const handleWSMessages = (wss, ws, msg) => {
+const handleWSMessages = (wss, ws, req, msg) => {
   console.log(msg);
   switch (msg.type) {
     case "SOCKET_CHANGE_BOARD_STATE": {
@@ -33,7 +35,13 @@ const handleWSMessages = (wss, ws, msg) => {
       break;
     }
     case "SOCKET_GET_BOARD_STATE": {
-      ws.send(JSON.stringify({type: "INIT_BOARD", board: board}));
+      ws.send(JSON.stringify({
+        type: "INIT_BOARD",
+        board: {
+          ...board,
+          users: [...Object.values(webSockets)],
+        },
+      }));
       break;
     }
     case "SOCKET_ADD_CARD_COLUMN": {
@@ -60,7 +68,6 @@ const handleWSMessages = (wss, ws, msg) => {
         card: msg.card
       }
       board.cards = board.cards.map((card) => {
-        console.log(card.card, data.card);
         if (card.card.id === data.card.id) {
           return {
             ...card,
@@ -107,6 +114,21 @@ const handleWSMessages = (wss, ws, msg) => {
       });
       break;
     }
+    case "SOCKET_USER_JOIN": {
+      webSockets[ws.id] = msg.user.user;
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({
+            type: "INIT_BOARD",
+            board: {
+              ...board,
+              users: [...Object.values(webSockets)],
+            },
+          }));
+        }
+      });
+      break;
+    }
     default:
       console.log("Something else called", msg.type);
       break;
@@ -115,11 +137,30 @@ const handleWSMessages = (wss, ws, msg) => {
 
 const wss = new WebSocket.Server({server: server});
 wss.on("connection", (ws, req) => {
-  console.log(req);
-  console.log("========================================");
-  console.log(ws);
-  ws.send(JSON.stringify({type: "INIT_BOARD", board: board}));
+  ws.id = _.uniqueId();
+  ws.send(JSON.stringify({
+    type: "INIT_BOARD",
+    board: {
+      ...board,
+      users: [...Object.values(webSockets)],
+    }
+  }));
   ws.on("message", (msg) => {
-    handleWSMessages(wss, ws, JSON.parse(msg));
+    handleWSMessages(wss, ws, req, JSON.parse(msg));
+  });
+  ws.on("close", () => {
+    delete webSockets[ws.id];
+    console.log(...Object.values(webSockets));
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({
+          type: "INIT_BOARD",
+          board: {
+            ...board,
+            users: [...Object.values(webSockets)],
+          },
+        }));
+      }
+    });
   });
 });

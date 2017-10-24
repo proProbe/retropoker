@@ -65,6 +65,10 @@ class ModalEdit extends React.Component<TProps, TState> {
   }
 
   private closeModal = (): void => {
+    const maybeCard = this.getCard(this.props.columnId, this.props.cardId);
+    if (maybeCard) {
+      this.props.socketMobileShowCard(maybeCard);
+    }
     return this.props.onClose();
   }
 

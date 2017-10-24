@@ -1,7 +1,7 @@
 import "rxjs";
 import { combineEpics, ActionsObservable } from "redux-observable";
 // tslint:disable-next-line
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { MiddlewareAPI } from "redux";
 import { RootState, RootAction } from "../store";
 import { TCard } from "../../views/desktop/card/card.types";
@@ -80,9 +80,12 @@ export const actionCreators = {
   }),
 };
 
+const openSubject = new Subject();
 const wsPath = process.env.WS_PATH || "ws://localhost:3000/socket";
 export const socket$ = Observable.webSocket({
   url: wsPath,
+  openObserver: openSubject,
+  closeObserver: { next: (val: any) => console.info("closing", val)},
 });
 
 const wsEpic =
@@ -129,9 +132,21 @@ const wsLiveEpic =
     .map((action: TSocketActions) => socket$.next(JSON.stringify(action)))
     .mapTo({type: "NOOP"} as RootAction);
 
+const testEpic =
+  (action$: ActionsObservable<TSocketActions>, store: MiddlewareAPI<RootState>): Observable<TActions> =>
+  action$.ofType(SOCKET_CARD_SUB)
+    .switchMap((action: TSocketActions) =>
+      openSubject
+        .mapTo(socket$.next(JSON.stringify({
+          type: "SOCKET_USER_JOIN",
+          user: store.getState().user,
+        }))),
+    ).mapTo({type: "NOOP"} as RootAction);
+
 const rootEpic = combineEpics(
   wsEpic,
   wsActionsEpic,
   wsLiveEpic,
+  testEpic,
 );
 export default rootEpic;
