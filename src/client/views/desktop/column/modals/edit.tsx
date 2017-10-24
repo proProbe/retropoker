@@ -57,10 +57,12 @@ class ModalEdit extends React.Component<TProps, TState> {
   }
 
   private confirmModal = (): void => {
-    this.props.socketEditCard({
+    const editedCard = {
       ...this.state.cardToEdit,
       status: {type: "read"},
-    });
+    } as TCard;
+    this.props.socketEditCard(editedCard);
+    this.props.socketMobileShowCard(editedCard);
     return this.props.onConfirm();
   }
 

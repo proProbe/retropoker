@@ -31,9 +31,21 @@ class ExportView extends React.Component<TProps, TState> {
           </Header>
         </div>
         <div>
-          <Header as="h3">
+          <Header as="h4">
             Participants
           </Header>
+          <div style={{display: "flex", flexWrap: "wrap"}}>
+            {this.props.players.map((player) => {
+              return (
+                <div
+                  key={_.uniqueId("Export-Player")}
+                  style={{paddingRight: 10}}
+                >
+                  {player.name}
+                </div>
+              );
+            })}
+          </div>
         </div>
         <Divider horizontal/>
         <div
@@ -121,6 +133,7 @@ const mapStateToProps = (state: RootState) => {
     boardState: state.board.state,
     user: state.user.user,
     cardToShow: state.mobile.card,
+    players: state.board.users,
   };
 };
 const mapStateProps = returntypeof(mapStateToProps);
