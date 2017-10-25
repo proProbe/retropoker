@@ -74,7 +74,9 @@
     "@types/semantic-ui": "^2.2.5",
     "concurrently": "^3.5.0",
     "nodemon": "^1.12.1",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "stylelint-config-standard": "^17.0.0",
+    "stylelint-no-unsupported-browser-features": "^1.0.1"
   },
   "jest": {
     "mapCoverage": true,
