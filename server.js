@@ -12,6 +12,7 @@ const server = app.listen(port, "0.0.0.0", (err, res) => {
   if (err) {
     return console.log(err);
   }
+  console.log(`Environment: ${process.env.NODE_ENV}`)
   console.log(`Listening on port ${port}`);
 });
 
