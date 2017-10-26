@@ -7,6 +7,10 @@ const port = isDev ? 3001 : process.env.PORT;
 const app = express();
 if (!isDev) {
   app.use(express.static("build"));
+  app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, "build/index.html"));
+    res.end();
+  });
 }
 const server = app.listen(port, "0.0.0.0", (err, res) => {
   if (err) {
@@ -21,6 +25,13 @@ let users = [];
 let board = {
   state: "hidden",
   cards: [],
+}
+
+const getBoard = () => {
+  return {
+    ...board,
+    users: [...Object.values(webSockets)],
+  }
 }
 
 const handleWSMessages = (wss, ws, req, msg) => {
@@ -38,10 +49,7 @@ const handleWSMessages = (wss, ws, req, msg) => {
     case "SOCKET_GET_BOARD_STATE": {
       ws.send(JSON.stringify({
         type: "INIT_BOARD",
-        board: {
-          ...board,
-          users: [...Object.values(webSockets)],
-        },
+        board: getBoard(),
       }));
       break;
     }
@@ -120,11 +128,8 @@ const handleWSMessages = (wss, ws, req, msg) => {
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
           client.send(JSON.stringify({
-            type: "INIT_BOARD",
-            board: {
-              ...board,
-              users: [...Object.values(webSockets)],
-            },
+            type: "UPDATE_USERS",
+            users: [...Object.values(webSockets)],
           }));
         }
       });
@@ -138,30 +143,37 @@ const handleWSMessages = (wss, ws, req, msg) => {
 
 const wss = new WebSocket.Server({server: server});
 wss.on("connection", (ws, req) => {
+  console.log("connected");
   ws.id = _.uniqueId();
   ws.send(JSON.stringify({
     type: "INIT_BOARD",
-    board: {
-      ...board,
-      users: [...Object.values(webSockets)],
-    }
+    board: getBoard(),
   }));
   ws.on("message", (msg) => {
     handleWSMessages(wss, ws, req, JSON.parse(msg));
   });
   ws.on("close", () => {
+    console.log("close");
     delete webSockets[ws.id];
-    console.log(...Object.values(webSockets));
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify({
-          type: "INIT_BOARD",
-          board: {
-            ...board,
-            users: [...Object.values(webSockets)],
-          },
+          type: "UPDATE_USERS",
+          users: [...Object.values(webSockets)],
         }));
       }
     });
+  });
+  ws.on("open", () => {
+    console.log("open");
+  });
+  ws.on("ping", () => {
+    console.log("ping")
+  });
+  ws.on("pong", () => {
+    console.log("pong")
+  });
+  ws.on("error", (e) => {
+    console.log("error", e)
   });
 });

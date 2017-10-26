@@ -8,6 +8,7 @@ import {
   TBoardAction,
 } from "./types";
 import _ from "lodash";
+import { UPDATE_USERS } from "./types";
 
 export const initialBoardState: TBoard = {
   state: "hidden",
@@ -103,7 +104,14 @@ export const boardReducer = (state: TBoard = initialBoardState, action: TBoardAc
       };
     }
 
+    case UPDATE_USERS: {
+      return {
+        ...state,
+        users: action.users,
+      };
+    }
+
     default:
-        return state;
+      return state;
   }
 };

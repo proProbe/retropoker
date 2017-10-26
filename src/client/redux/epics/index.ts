@@ -104,6 +104,7 @@ const wsEpic =
               "CHANGE_BOARD_STATE",
               "CHANGE_CARD",
               "MOBILE_SHOW_CARD",
+              "UPDATE_USERS",
             ].includes(serverAction.type))
           .map((serverAction: RootAction) => serverAction)
           .catch((error) => {
@@ -137,7 +138,7 @@ const testEpic =
   action$.ofType(SOCKET_CARD_SUB)
     .switchMap((action: TSocketActions) =>
       openSubject
-        .mapTo(socket$.next(JSON.stringify({
+        .do(() => socket$.next(JSON.stringify({
           type: "SOCKET_USER_JOIN",
           user: store.getState().user,
         }))),

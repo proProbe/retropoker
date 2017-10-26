@@ -1,4 +1,3 @@
-
 export const SET_USER = "SET_USER";
 export type SET_USER_ACTION = {
   type: typeof SET_USER,
@@ -6,7 +5,7 @@ export type SET_USER_ACTION = {
 };
 
 export type TUserAction
-= SET_USER_ACTION;
+  = SET_USER_ACTION;
 
 export type TUser = {
   name: string,
