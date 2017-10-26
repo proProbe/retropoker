@@ -93,14 +93,15 @@ class Controller extends React.Component<TProps, TState> {
           </Form.Field>
         </Form>
         <Divider horizontal>Players</Divider>
-        <div style={{flex: 1, alignItems: "center", display: "flex", flexDirection: "column"}}>
+        <div style={{flex: 1, alignItems: "center", display: "flex", flexDirection: "column", paddingTop: 10}}>
           {this.props.players.map((player) => {
             return (
-              <div
+              <p
                 key={_.uniqueId("Player-")}
+                style={{fontSize: "1.2rem", fontWeight: 600, fontStyle: "italic"}}
               >
                 {player.name}
-              </div>
+              </p>
             );
           })}
         </div>

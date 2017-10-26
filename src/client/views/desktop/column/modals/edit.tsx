@@ -136,7 +136,7 @@ class ModalEdit extends React.Component<TProps, TState> {
           <TextArea
             value={this.state.cardToEdit.description}
             style={{
-              fontSize: "4vh",
+              fontSize: "5rem",
               padding: "0.25em 0.5em",
             }}
             onChange={this.handleCardChange}

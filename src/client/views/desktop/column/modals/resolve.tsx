@@ -156,7 +156,7 @@ class ModalResolve extends React.Component<TProps, TState> {
           <TextArea
             value={getStatusMessage(this.state.cardToResolve)}
             style={{
-              fontSize: "3vh",
+              fontSize: "4rem",
               padding: "0.25em 0.5em",
             }}
             onChange={this.handleCardChange}
@@ -195,7 +195,7 @@ class ModalResolve extends React.Component<TProps, TState> {
                   return (
                     <p
                       key={_.uniqueId()}
-                      style={{ overflowWrap: "break-word", fontSize: "1.5rem" }}
+                      style={{ overflowWrap: "break-word", fontSize: "3rem" }}
                     >
                       {text}
                       <br />
