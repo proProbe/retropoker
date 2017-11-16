@@ -111,10 +111,11 @@ class ModalResolve extends React.Component<TProps, TState> {
     if (!this.hasNextCard()) {
       return;
     }
+    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex + 1];
     this.props.socketEditCard({
       ...this.state.cardToResolve,
+      status: nextCard.status.type === "resolved" ? nextCard.status : {type: "resolved", message: ""},
     });
-    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex + 1];
     this.props.socketMobileShowCard(nextCard);
     return this.setState({
       currentIndex: this.state.currentIndex + 1,
@@ -129,10 +130,11 @@ class ModalResolve extends React.Component<TProps, TState> {
     if (!this.hasPreviousCard()) {
       return;
     }
+    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex - 1];
     this.props.socketEditCard({
       ...this.state.cardToResolve,
+      status: nextCard.status.type === "resolved" ? nextCard.status : {type: "resolved", message: ""},
     });
-    const nextCard = this.getCards(this.props.columnId)[this.state.currentIndex - 1];
     this.props.socketMobileShowCard(nextCard);
     return this.setState({
       currentIndex: this.state.currentIndex - 1,
